@@ -1,0 +1,67 @@
+{
+  "providers": {
+    "ollama": {
+      "host": "http://localhost:11434",
+      "timeout": 30000,
+      "maxRetries": 3,
+      "models": {
+        "fast": "llama3.2:latest",
+        "balanced": "mistral:7b",
+        "creative": "llama3.2:latest",
+        "code": "mistral:7b",
+        "large": "mistral:7b"
+      }
+    },
+    "gemini": {
+      "models": {
+        "fast": "gemini-1.5-flash",
+        "balanced": "gemini-1.5-pro",
+        "creative": "gemini-1.5-pro",
+        "code": "gemini-1.5-pro",
+        "large": "gemini-1.5-pro"
+      },
+      "rateLimit": {
+        "requestsPerMinute": 60,
+        "requestsPerDay": 1000
+      },
+      "timeout": 15000
+    }
+  },
+  "routing": {
+    "preferLocal": true,
+    "maxCost": 0.10,
+    "fallbackOrder": ["ollama", "gemini"],
+    "taskRoutingRules": {
+      "code": ["ollama", "gemini"],
+      "creative": ["ollama", "gemini"],
+      "fast": ["ollama"],
+      "complex": ["ollama", "gemini"],
+      "analysis": ["ollama", "gemini"],
+      "balanced": ["ollama", "gemini"]
+    }
+  },
+  "context": {
+    "maxLength": 20,
+    "autoTrim": true,
+    "trimPercentage": 0.8
+  },
+  "knowledgeBase": {
+    "maxEntries": 1000,
+    "cleanupThreshold": 0.2
+  },
+  "security": {
+    "maxFileSize": 1048576,
+    "allowedExtensions": [".js", ".ts", ".py", ".md", ".txt", ".json", ".yaml", ".yml"],
+    "restrictToProjectDir": true
+  },
+  "performance": {
+    "requestTimeout": 30000,
+    "maxConcurrentRequests": 5,
+    "cacheEnabled": false
+  },
+  "logging": {
+    "level": "info",
+    "sanitizeApiKeys": true,
+    "logRequests": true
+  }
+}

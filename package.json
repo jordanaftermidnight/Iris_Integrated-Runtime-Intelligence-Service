@@ -1,0 +1,66 @@
+{
+  "name": "multi-ai-integration",
+  "version": "2.0.0",
+  "description": "Enhanced Multi-AI Integration CLI with smart provider selection, supporting Ollama and Gemini",
+  "main": "src/enhanced-ai.js",
+  "type": "module",
+  "bin": {
+    "multi-ai": "./src/enhanced-ai.js"
+  },
+  "scripts": {
+    "start": "node src/enhanced-ai.js",
+    "test": "node tests/test-runner.js",
+    "test:examples": "node examples/basic-usage.js",
+    "dev": "node --watch src/enhanced-ai.js",
+    "health": "node src/enhanced-ai.js health",
+    "models": "node src/enhanced-ai.js models",
+    "providers": "node src/enhanced-ai.js providers",
+    "lint": "eslint src/ tests/ examples/",
+    "lint:fix": "eslint src/ tests/ examples/ --fix",
+    "validate": "npm run lint && npm test",
+    "prepack": "npm run validate"
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "ollama",
+    "gemini",
+    "cli",
+    "multi-provider",
+    "automation",
+    "machine-learning",
+    "nlp",
+    "chat"
+  ],
+  "author": "Jordan After Midnight",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jordanaftermidnight/multi-ai-mcp-integration.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jordanaftermidnight/multi-ai-mcp-integration/issues"
+  },
+  "homepage": "https://github.com/jordanaftermidnight/multi-ai-mcp-integration#readme",
+  "dependencies": {
+    "ollama": "^0.5.16"
+  },
+  "optionalDependencies": {
+    "@google/generative-ai": "^0.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/jordanaftermidnight"
+  }
+}
