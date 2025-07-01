@@ -32,14 +32,14 @@ A comprehensive multi-provider AI consultation system that integrates **Google G
 
 ### **One-Line Installation**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/your-username/multi-ai-mcp/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/jordanaftermidnight/multi-ai-mcp-integration/main/install.sh | bash
 ```
 
 ### **Manual Installation**
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/multi-ai-mcp.git
-cd multi-ai-mcp
+git clone https://github.com/jordanaftermidnight/multi-ai-mcp-integration.git
+cd multi-ai-mcp-integration
 
 # Run setup script
 ./setup.sh
@@ -193,8 +193,8 @@ Edit `config/multi-ai-config.json`:
 ### **Setup Development Environment**
 ```bash
 # Clone repository
-git clone https://github.com/your-username/multi-ai-mcp.git
-cd multi-ai-mcp
+git clone https://github.com/jordanaftermidnight/multi-ai-mcp-integration.git
+cd multi-ai-mcp-integration
 
 # Create virtual environment
 python -m venv venv
@@ -299,5 +299,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Transform your development workflow with intelligent multi-AI consultation! 🚀**
 
-[![GitHub stars](https://img.shields.io/github/stars/your-username/multi-ai-mcp?style=social)](https://github.com/your-username/multi-ai-mcp/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/your-username/multi-ai-mcp?style=social)](https://github.com/your-username/multi-ai-mcp/network/members)
+[![GitHub stars](https://img.shields.io/github/stars/jordanaftermidnight/multi-ai-mcp-integration?style=social)](https://github.com/jordanaftermidnight/multi-ai-mcp-integration/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/jordanaftermidnight/multi-ai-mcp-integration?style=social)](https://github.com/jordanaftermidnight/multi-ai-mcp-integration/network/members)

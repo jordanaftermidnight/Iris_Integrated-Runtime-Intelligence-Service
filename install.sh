@@ -9,8 +9,8 @@ echo "🚀 Multi-AI MCP Integration - One-Line Installer"
 echo "================================================"
 
 # Configuration
-REPO_URL="https://github.com/your-username/multi-ai-mcp.git"
-INSTALL_DIR="$HOME/multi-ai-mcp"
+REPO_URL="https://github.com/jordanaftermidnight/multi-ai-mcp-integration.git"
+INSTALL_DIR="$HOME/multi-ai-mcp-integration"
 
 # Color codes
 GREEN='\033[0;32m'

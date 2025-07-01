@@ -44,10 +44,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-username/multi-ai-mcp"
-Repository = "https://github.com/your-username/multi-ai-mcp.git"
-Documentation = "https://github.com/your-username/multi-ai-mcp/docs"
-"Bug Tracker" = "https://github.com/your-username/multi-ai-mcp/issues"
+Homepage = "https://github.com/jordanaftermidnight/multi-ai-mcp-integration"
+Repository = "https://github.com/jordanaftermidnight/multi-ai-mcp-integration.git"
+Documentation = "https://github.com/jordanaftermidnight/multi-ai-mcp-integration/docs"
+"Bug Tracker" = "https://github.com/jordanaftermidnight/multi-ai-mcp-integration/issues"
 
 [project.scripts]
 multi-ai-setup = "scripts.setup_system:main"

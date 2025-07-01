@@ -40,8 +40,8 @@ Before contributing, ensure you have:
 1. **Fork the repository**
    ```bash
    # Fork on GitHub, then clone your fork
-   git clone https://github.com/YOUR_USERNAME/multi-ai-mcp.git
-   cd multi-ai-mcp
+   git clone https://github.com/YOUR_USERNAME/multi-ai-mcp-integration.git
+   cd multi-ai-mcp-integration
    ```
 
 2. **Set up development environment**
