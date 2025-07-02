@@ -88,7 +88,7 @@ export class MultiAI {
    * Initialize optional providers (Gemini, Claude)
    */
   async initializeOptionalProviders(options = {}) {
-    // Initialize Claude quietly
+    // Initialize Claude if API key available
     if (process.env.ANTHROPIC_API_KEY || this.config.providers?.claude?.apiKey) {
       try {
         const claudeProvider = new ClaudeProvider({
@@ -106,11 +106,28 @@ export class MultiAI {
           cost: 'paid'
         };
       } catch (error) {
-        this.providerStatus.claude.status = 'error';
+        this.providerStatus.claude = {
+          available: false,
+          status: 'error',
+          priority: 3,
+          type: 'cloud',
+          cost: 'paid',
+          error: 'API initialization failed'
+        };
       }
+    } else {
+      // No API key provided
+      this.providerStatus.claude = {
+        available: false,
+        status: 'no_api_key',
+        priority: 3,
+        type: 'cloud',
+        cost: 'paid',
+        message: 'Set ANTHROPIC_API_KEY to enable'
+      };
     }
 
-    // Initialize Gemini quietly  
+    // Initialize Gemini if API key available  
     if (process.env.GEMINI_API_KEY || this.config.providers?.gemini?.apiKey) {
       try {
         const geminiProvider = new GeminiProvider({
@@ -128,8 +145,25 @@ export class MultiAI {
           cost: 'paid'
         };
       } catch (error) {
-        this.providerStatus.gemini.status = 'error';
+        this.providerStatus.gemini = {
+          available: false,
+          status: 'error',
+          priority: 2,
+          type: 'cloud',
+          cost: 'paid',
+          error: 'API initialization failed'
+        };
       }
+    } else {
+      // No API key provided
+      this.providerStatus.gemini = {
+        available: false,
+        status: 'no_api_key',
+        priority: 2,
+        type: 'cloud',
+        cost: 'paid',
+        message: 'Set GEMINI_API_KEY to enable'
+      };
     }
   }
 
@@ -154,11 +188,21 @@ export class MultiAI {
     console.log('\n📊 Provider Status:');
     
     for (const [name, status] of Object.entries(this.providerStatus)) {
-      const icon = status.available ? '✅' : (status.status === 'error' ? '❌' : '⚠️');
+      const icon = status.available ? '✅' : (status.status === 'error' ? '❌' : 
+                  (status.status === 'no_api_key' ? '🔑' : '⚠️'));
       const costBadge = status.cost === 'free' ? '🆓' : '💰';
       const typeBadge = status.type === 'local' ? '🏠' : '☁️';
       
-      console.log(`${icon} ${name.toUpperCase().padEnd(8)} ${typeBadge} ${costBadge} Priority: ${status.priority} - ${status.status}`);
+      let statusText = status.status;
+      if (status.status === 'no_api_key') {
+        statusText = 'needs API key';
+      }
+      
+      console.log(`${icon} ${name.toUpperCase().padEnd(8)} ${typeBadge} ${costBadge} Priority: ${status.priority} - ${statusText}`);
+      
+      if (status.message) {
+        console.log(`   💡 ${status.message}`);
+      }
     }
     
     const summary = this.getProviderStatus().summary;
