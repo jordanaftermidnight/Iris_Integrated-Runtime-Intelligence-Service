@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Multi-AI Integration CLI - Global Entry Point
- * Single command execution: multi-ai
+ * Iris - Integrated Runtime Intelligence Service - Global Entry Point
+ * Single command execution: iris
  */
 
 import MultiAI from './index.js';

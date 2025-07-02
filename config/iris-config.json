@@ -1,4 +1,5 @@
 {
+  "_comment": "Configuration for Iris - Multi-AI Chat Assistant",
   "providers": {
     "ollama": {
       "host": "http://localhost:11434",

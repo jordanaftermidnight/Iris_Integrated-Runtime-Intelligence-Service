@@ -1,12 +1,11 @@
 {
-  "name": "multi-ai-integration-cli",
+  "name": "iris-ai",
   "version": "2.3.0",
-  "description": "Enhanced Multi-AI Integration CLI with smart provider selection, supporting Ollama, Gemini, and Claude",
+  "description": "Iris - Integrated Runtime Intelligence Service with smart provider selection, supporting Ollama, Gemini, and Claude",
   "main": "src/enhanced-ai.js",
   "type": "module",
   "bin": {
-    "multi-ai": "./src/enhanced-ai.js",
-    "mai": "./src/enhanced-ai.js"
+    "iris": "./src/enhanced-ai.js"
   },
   "preferGlobal": true,
   "scripts": {

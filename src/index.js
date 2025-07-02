@@ -10,7 +10,7 @@ import { OpenAIProvider } from './providers/openai-provider.js';
 import { GroqProvider } from './providers/groq-provider.js';
 
 /**
- * Enhanced Multi-AI Integration System
+ * Iris - Integrated Runtime Intelligence Service
  * Main entry point for programmatic usage
  */
 export class MultiAI {
@@ -576,7 +576,7 @@ Please provide insights about:
   /**
    * Load configuration with defaults
    */
-  loadConfig(configPath = './config/multi-ai.json') {
+  loadConfig(configPath = './config/iris-config.json') {
     const defaultConfig = {
       providers: {
         ollama: {
@@ -640,7 +640,7 @@ Please provide insights about:
   /**
    * Save configuration with error handling
    */
-  saveConfig(configPath = './config/multi-ai.json') {
+  saveConfig(configPath = './config/iris-config.json') {
     try {
       const configDir = path.dirname(configPath);
       if (!fs.existsSync(configDir)) {

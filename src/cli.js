@@ -48,12 +48,12 @@ function parseArgs(args) {
  */
 function showHelp() {
   console.log(`
-🤖 Multi-AI Integration CLI v2.3.0
-====================================
+🤖 Iris - Integrated Runtime Intelligence Service v2.3.0
+==========================================
 Cost-Optimized AI with Mistral-First Logic
 
 USAGE:
-  multi-ai <command> [message] [options]
+  iris <command> [message] [options]
 
 COMMANDS:
   chat <message>              Chat with AI using smart provider selection
@@ -85,12 +85,12 @@ OPTIONS:
   --help, -h                  Show this help message
 
 EXAMPLES:
-  multi-ai chat "Hello, how are you?"
-  multi-ai chat "Write a Python function" --task=code
-  multi-ai chat "What is 2+2?" --provider=gemini
-  multi-ai file ./my-script.js --task=code --verbose
-  multi-ai providers
-  multi-ai health
+  iris chat "Hello, how are you?"
+  iris chat "Write a Python function" --task=code
+  iris chat "What is 2+2?" --provider=gemini
+  iris file ./my-script.js --task=code --verbose
+  iris providers
+  iris health
 
 ENVIRONMENT VARIABLES:
   OPENAI_API_KEY             OpenAI API key for o1/GPT-4o models (optional)
@@ -175,7 +175,7 @@ async function runCLI() {
 
       default:
         console.error(`❌ Unknown command: ${command}`);
-        console.log('Run "multi-ai help" to see available commands.');
+        console.log('Run "iris help" to see available commands.');
         process.exit(1);
     }
 
@@ -194,7 +194,7 @@ async function runCLI() {
 async function handleChatCommand(ai, message, options) {
   if (!message.trim()) {
     console.log('❌ Please provide a message to chat with AI');
-    console.log('Usage: multi-ai chat "Your message here" [--task=type]');
+    console.log('Usage: iris chat "Your message here" [--task=type]');
     return;
   }
 
@@ -295,7 +295,7 @@ async function handleModelsCommand(ai, options) {
 async function handleFileCommand(ai, filePath, options) {
   if (!filePath.trim()) {
     console.log('❌ Please provide a file path');
-    console.log('Usage: multi-ai file <path> [--task=type]');
+    console.log('Usage: iris file <path> [--task=type]');
     return;
   }
 
@@ -324,7 +324,7 @@ async function handleFileCommand(ai, filePath, options) {
 async function handleDirectoryCommand(ai, dirPath, options) {
   if (!dirPath.trim()) {
     console.log('❌ Please provide a directory path');
-    console.log('Usage: multi-ai dir <path> [--task=type]');
+    console.log('Usage: iris dir <path> [--task=type]');
     return;
   }
 
@@ -420,7 +420,7 @@ async function handleConfigCommand(ai, args, options) {
       break;
       
     default:
-      console.log('Usage: multi-ai config save/load [path]');
+      console.log('Usage: iris config save/load [path]');
   }
 }
 
