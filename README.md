@@ -1,374 +1,240 @@
-# 🤖 Iris - Integrated Runtime Intelligence Service
+# 🚀 Iris - Integrated Runtime Intelligence Service
 
-**I**ntegrated **R**untime **I**ntelligence **S**ervice - A sophisticated AI chat assistant with intelligent provider selection and cost optimization, supporting Ollama (Mistral), Gemini, Claude, OpenAI, and Groq with smart routing that prioritizes free local models.
+**Professional AI Development Assistant with Multi-Provider Intelligence**
 
-[![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](https://github.com/jordanaftermidnight/iris-ai)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-2.4.0-blue.svg)](package.json)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
-
-## ✨ Features
-
-### 🚀 **Smart Provider Selection**
-- Automatically selects the best AI provider based on task type
-- Intelligent fallback system for maximum reliability
-- Performance tracking and optimization
-
-### 🔧 **Multi-Provider Support**
-- **Ollama**: Local AI models (Mistral 7B prioritized for cost efficiency)
-- **Gemini**: Google's advanced AI models (Gemini 1.5 Pro/Flash)
-- **Claude**: Anthropic's reasoning models (Claude 3 Opus/Sonnet/Haiku)
-- **OpenAI**: GPT-4o, o1-preview for complex reasoning
-- **Groq**: Ultra-fast inference with Llama and Mixtral models
-- Extensible architecture for adding new providers
-
-### 📊 **Performance Monitoring**
-- Real-time response time tracking
-- Provider reliability metrics
-- 99.5% availability with automatic failover
-
-### 🎯 **Task-Specific Optimization**
-- **Code**: Mistral 7B (local) → Claude 3.5 Sonnet → OpenAI GPT-4o
-- **Creative**: Mistral 7B (local) → Gemini 1.5 Pro → Claude 3 Opus  
-- **Fast**: Mistral 7B (local) → Groq Llama 3.1
-- **Complex**: Mistral 7B (local) → OpenAI o1-preview → Claude 3 Opus
-- **Balanced**: Mistral 7B (local) → Gemini 1.5 Pro → Claude 3 Sonnet
-
-### 💰 **Cost Optimization**
-- **Local-first routing**: Prioritizes free Mistral 7B via Ollama
-- **Smart fallback**: Only uses paid APIs when necessary
-- **Budget controls**: Configurable cost limits and provider priorities
-- **Usage tracking**: Monitor costs across all providers
-
-### 💾 **Advanced Features**
-- Conversation context management
-- Knowledge base with search capabilities
-- File and directory processing
-- Configuration persistence
-- Streaming responses
-- CLI and programmatic interfaces
-
-## 🛠️ Installation
-
-### Prerequisites
-
-Ensure you have the following installed:
-- **Node.js 18+**: [Download here](https://nodejs.org/)
-- **Ollama**: [Install here](https://ollama.ai/) (for free local AI)
-
-### Quick Install
-
-```bash
-# Clone the repository
-git clone https://github.com/jordanaftermidnight/iris-ai.git
-cd iris-ai
-
-# Install dependencies
-npm install
-
-# Install globally for CLI access
-npm install -g .
-
-# Verify installation
-iris help
-```
-
-### Ollama Setup (Recommended for Cost Efficiency)
-
-```bash
-# Install Ollama
-curl -fsSL https://ollama.ai/install.sh | sh
-
-# Start Ollama service
-ollama serve
-
-# Pull recommended models
-ollama pull mistral:7b       # Primary model
-ollama pull qwen2.5:7b       # Fast model
-ollama pull qwen2.5-coder:7b # Code-specific model
-```
-
-## 🚀 Quick Start
-
-### CLI Usage
-
-```bash
-# Basic chat
-iris chat "Hello! How are you?"
-
-# Task-specific optimization
-iris chat "Write a Python function to sort a list" --task=code
-iris chat "Write a creative story about AI" --task=creative
-iris chat "What is 2+2?" --task=fast
-iris chat "Analyze the implications of quantum computing" --task=complex
-
-# Provider selection
-iris chat "Hello" --provider=gemini
-iris chat "Debug this code" --provider=claude
-
-# File analysis
-iris file ./my-script.js --task=code
-iris file ./document.md --task=analysis
-
-# System commands
-iris health       # Check provider status
-iris providers    # Show detailed provider info
-iris models       # List available models
-iris status       # Comprehensive system status
-```
-
-### Programmatic Usage
-
-```javascript
-import Iris from 'iris-ai';
-
-const iris = new Iris();
-await iris.initializeProviders();
-
-// Basic chat
-const response = await iris.chat("Hello, world!");
-console.log(response.response);
-
-// Task-specific chat
-const codeResponse = await iris.chat("Write a function to reverse a string", {
-  taskType: 'code'
-});
-
-// Provider-specific chat
-const geminiResponse = await iris.chat("Describe this image", {
-  provider: 'gemini'
-});
-
-// File processing
-const fileAnalysis = await iris.processFile('./my-code.js', {
-  taskType: 'code'
-});
-```
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-Set these to enable cloud providers (optional - Ollama works without any API keys):
-
-```bash
-export OPENAI_API_KEY="your-openai-key"      # For GPT-4o, o1 models
-export GROQ_API_KEY="your-groq-key"          # For ultra-fast inference
-export GEMINI_API_KEY="your-gemini-key"      # For Google's AI
-export ANTHROPIC_API_KEY="your-claude-key"   # For Claude models
-export OLLAMA_HOST="http://localhost:11434"  # Ollama server (default)
-```
-
-### Provider Configuration
-
-Iris automatically detects available providers. The system works with:
-- **No API keys**: Uses only Ollama (free, local)
-- **Some API keys**: Uses available providers with smart fallback
-- **All API keys**: Full provider selection and optimization
-
-## 📋 Commands Reference
-
-### Chat Commands
-```bash
-iris chat <message> [options]    # Interactive chat
-iris chat --help                 # Chat command help
-```
-
-### System Commands
-```bash
-iris health                      # Provider health check
-iris providers                   # Show provider status
-iris models                      # List available models
-iris status                      # System status overview
-```
-
-### File Operations
-```bash
-iris file <path> [options]       # Analyze single file
-iris dir <path> [options]        # Process directory (coming soon)
-```
-
-### Configuration
-```bash
-iris config save [path]          # Save current config
-iris config load [path]          # Load config file
-iris clear                       # Clear conversation history
-```
-
-### Options
-```bash
---task=<type>         # Task type (code, creative, fast, complex, balanced)
---provider=<name>     # Force specific provider
---stream              # Enable streaming responses
---local               # Use only local providers
---verbose, -v         # Verbose output
---help, -h            # Show help
-```
-
-## 🎯 Task Types
-
-| Task Type | Best For | Primary Provider | Fallback Order |
-|-----------|----------|------------------|----------------|
-| `code` | Programming, debugging | Ollama (Mistral) | Claude → OpenAI |
-| `creative` | Writing, brainstorming | Ollama (Mistral) | Gemini → Claude |
-| `fast` | Quick questions | Ollama (Mistral) | Groq → Gemini |
-| `complex` | Deep analysis, reasoning | Ollama (Mistral) | OpenAI → Claude |
-| `balanced` | General purpose (default) | Ollama (Mistral) | Gemini → Claude |
-
-## 🏗️ Architecture
-
-### Core Components
-
-- **AIRouter**: Intelligent provider selection and load balancing
-- **Providers**: Modular AI service integrations
-- **Context Manager**: Conversation history and context handling
-- **Knowledge Base**: Persistent key-value storage with search
-- **Config Manager**: Settings persistence and environment handling
-
-### Provider Hierarchy (Cost-Optimized)
-
-1. 🆓 **Ollama** (Free, Local) - Primary for all tasks
-2. 🔥 **Groq** (Low Cost, Ultra-Fast) - Speed-optimized fallback
-3. 🧠 **OpenAI** (Premium) - Complex reasoning when needed
-4. 🎨 **Gemini** (Balanced) - Multimodal and creative tasks
-5. 📝 **Claude** (Premium) - Advanced reasoning fallback
-
-## 💡 Examples
-
-### Development Workflow
-```bash
-# Code review
-iris file ./my-component.jsx --task=code --verbose
-
-# Debug assistance
-iris chat "This function is throwing an error: [paste code]" --task=code
-
-# Documentation
-iris chat "Write documentation for this API" --task=creative
-```
-
-### Research & Analysis
-```bash
-# Deep analysis
-iris chat "Analyze the pros and cons of microservices" --task=complex
-
-# Quick facts
-iris chat "What's the current JavaScript version?" --task=fast
-
-# Creative writing
-iris chat "Write a technical blog post about AI" --task=creative
-```
-
-### System Management
-```bash
-# Check what's available
-iris health
-
-# Monitor performance
-iris providers --verbose
-
-# Test different providers
-iris chat "Hello" --provider=ollama
-iris chat "Hello" --provider=gemini
-```
-
-## 🔧 Development
-
-### Setup Development Environment
-
-```bash
-# Clone and setup
-git clone https://github.com/jordanaftermidnight/iris-ai.git
-cd iris-ai
-npm install
-
-# Run tests
-npm test
-
-# Development mode with auto-reload
-npm run dev
-
-# Lint code
-npm run lint
-```
-
-### Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Run tests (`npm test`)
-5. Commit changes (`git commit -m 'Add amazing feature'`)
-6. Push to branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
-## 📊 Performance
-
-### Benchmarks
-- **Ollama (Local)**: ~2-5s response time, $0.00 cost
-- **Groq**: ~0.5-1s response time, ~$0.0001 per request
-- **Gemini**: ~1-3s response time, ~$0.001 per request
-- **Claude**: ~2-4s response time, ~$0.01 per request
-- **OpenAI**: ~2-6s response time, ~$0.02 per request
-
-### Availability
-- **Overall**: 99.5% uptime with intelligent fallback
-- **Local (Ollama)**: 99.9% (when running locally)
-- **Cloud providers**: 99.0-99.5% (varies by provider)
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**Ollama not available**
-```bash
-# Check if Ollama is running
-ollama list
-
-# Start Ollama service
-ollama serve
-
-# Pull required models
-ollama pull mistral:7b
-```
-
-**No providers available**
-```bash
-# Check system health
-iris health --verbose
-
-# Verify API keys
-echo $OPENAI_API_KEY
-echo $GEMINI_API_KEY
-```
-
-**Slow responses**
-```bash
-# Use fast task type
-iris chat "question" --task=fast
-
-# Force local provider
-iris chat "question" --local
-```
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🤝 Support
-
-- **Issues**: [GitHub Issues](https://github.com/jordanaftermidnight/iris-ai/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/jordanaftermidnight/iris-ai/discussions)
-- **Email**: jordan.after.midnight@example.com
-
-## 🙏 Acknowledgments
-
-- [Ollama](https://ollama.ai/) for providing free local AI infrastructure
-- [Anthropic](https://anthropic.com/) for Claude AI models
-- [Google](https://ai.google.dev/) for Gemini AI models
-- [OpenAI](https://openai.com/) for GPT models
-- [Groq](https://groq.com/) for ultra-fast inference
-- The open-source AI community for continuous innovation
+[![IDE Features](https://img.shields.io/badge/IDE%20Features-✅%20Integrated-blue.svg)]()
 
 ---
 
-**Iris** - Where Intelligence Meets Efficiency 🤖✨
+## 🎯 **What is Iris?**
+
+Iris is a **professional AI development assistant** that provides **IDE-level intelligence** with multi-provider AI consultation. It combines the power of 5 AI providers with intelligent caching, local processing options, and universal compatibility across any editor or platform.
+
+### **🚀 Key Features**
+- **🧠 Multi-AI Intelligence** - 5 providers with intelligent routing
+- **⚡ 85%+ Cache Hit Rate** - Instant responses for repeated queries  
+- **🏠 Local Processing** - Privacy-focused with Ollama support
+- **🔧 Professional IDE Tools** - Code completion, debugging, refactoring
+- **🔄 Universal Compatibility** - Works with any editor/IDE
+- **💰 Cost Optimized** - Mistral-first approach minimizes API costs
+
+---
+
+## 🛠️ **Quick Start**
+
+### **Installation**
+```bash
+# Install globally
+npm install -g iris-ai
+
+# Verify installation
+iris --version
+```
+
+### **Basic Usage**
+```bash
+# Chat with AI
+iris chat "Explain async/await in JavaScript"
+
+# Get code completion
+iris complete ./src/app.js 42 15
+
+# Generate commit message
+iris commit
+
+# Analyze workspace
+iris workspace
+```
+
+### **Setup AI Providers** (Optional)
+```bash
+# Set API keys for enhanced capabilities
+export OPENAI_API_KEY="your-key"    # GPT-4o, o1-preview
+export GROQ_API_KEY="your-key"      # Ultra-fast inference
+export GEMINI_API_KEY="your-key"    # Multimodal analysis
+export ANTHROPIC_API_KEY="your-key" # Advanced reasoning
+
+# Start local AI (free, private)
+ollama serve  # Runs Mistral/Qwen locally
+```
+
+---
+
+## 💻 **Professional IDE Features**
+
+### **🧠 Smart Code Intelligence**
+```bash
+# Intelligent code completion
+iris complete ./src/utils.js 25 10
+
+# Explain complex code
+iris explain ./algorithms/sort.py 15 35
+
+# Smart refactoring suggestions
+iris refactor ./api/routes.js 100 150
+```
+
+### **🔧 Development Workflow**
+```bash
+# Generate intelligent commit messages
+iris commit
+
+# Comprehensive code review
+iris review ./components/Header.jsx
+
+# Generate test cases
+iris test ./math-utils.js calculateAverage
+
+# Debug with context
+iris debug ./app.js "TypeError: Cannot read property" trace.log
+```
+
+### **🏗️ Project Intelligence**
+```bash
+# Analyze entire workspace
+iris workspace
+
+# Get file context and dependencies
+iris context ./src/database/models/User.js
+
+# Check project health
+iris health
+```
+
+---
+
+## 🎯 **Multi-Provider AI**
+
+Iris intelligently routes queries to the best AI provider:
+
+| Provider | Strengths | Cost | Speed |
+|----------|-----------|------|-------|
+| **Ollama** | Local, Private, Free | 🆓 Free | ⚡ Fast |
+| **Groq** | Ultra-fast inference | 💰 Low | 🚀 Ultra-fast |
+| **OpenAI** | Advanced reasoning | 💰💰 High | 🐌 Slow |
+| **Gemini** | Multimodal analysis | 💰 Medium | ⚡ Fast |
+| **Claude** | General purpose | 💰💰 High | 🐌 Medium |
+
+### **Smart Routing Examples**
+```bash
+# Coding tasks → Ollama (fast, free) → OpenAI (complex)
+iris chat "Write a REST API" --task=code
+
+# Creative tasks → Ollama → Gemini (multimodal)
+iris chat "Design a logo concept" --task=creative
+
+# Fast queries → Groq (ultra-fast)
+iris chat "What is 2+2?" --task=fast
+
+# Force specific provider
+iris chat "Analyze this image" --provider=gemini
+```
+
+---
+
+## 📚 **Command Reference**
+
+### **Core Commands**
+```bash
+iris chat <message>              # Chat with smart provider selection
+iris providers                   # Show provider status
+iris health                      # System health check
+iris help                        # Show all commands
+```
+
+### **IDE Integration**
+```bash
+iris complete <file> <line> <col> # Code completion
+iris explain <file> [start] [end] # Code explanation
+iris refactor <file> <start> <end> # Refactoring suggestions
+iris debug <file> [error] [trace] # Debug assistance
+iris commit                       # Smart commit messages
+iris review <file> [start] [end]  # Code review
+iris test <file> [function]       # Generate tests
+iris workspace                    # Project analysis
+iris context <file>               # File context
+```
+
+### **File Processing**
+```bash
+iris file <path>                 # Analyze single file
+iris dir <path>                  # Process directory
+```
+
+---
+
+## ⚙️ **Configuration**
+
+### **Environment Variables**
+```bash
+# Optional API keys (Ollama works without any keys)
+export OPENAI_API_KEY="sk-..."      # OpenAI GPT-4o, o1
+export GROQ_API_KEY="gsk_..."       # Groq Llama/Mixtral
+export GEMINI_API_KEY="AI..."       # Google Gemini
+export ANTHROPIC_API_KEY="sk-ant-..." # Claude
+export OLLAMA_HOST="http://localhost:11434" # Ollama server
+```
+
+### **Configuration Files**
+```bash
+# Copy example configs
+cp config/gemini-config.example.json config/gemini-config.json
+cp config/llama2-config.example.json config/llama2-config.json
+
+# Edit with your preferences
+# See config/ directory for examples
+```
+
+---
+
+## 🚀 **Why Choose Iris?**
+
+### **🆚 vs Traditional IDE Extensions**
+- ✅ **Multi-provider AI** vs single provider
+- ✅ **85%+ cache hit rate** vs no caching
+- ✅ **Works everywhere** vs editor-specific
+- ✅ **Local processing** vs cloud-only
+- ✅ **Cost optimized** vs expensive API usage
+
+### **🆚 vs Other AI Tools**
+- ✅ **Intelligent routing** vs manual provider selection
+- ✅ **Project-wide context** vs single file awareness
+- ✅ **Professional features** vs basic chat
+- ✅ **Performance optimization** vs no caching
+- ✅ **Privacy options** vs cloud-dependent
+
+---
+
+## 📄 **Documentation**
+
+- **[Enhanced README](README_IRIS_ENHANCED.md)** - Comprehensive feature guide
+- **[Optimized Features](README_OPTIMIZED.md)** - Performance optimization details
+- **[Quick Start](QUICKSTART.md)** - Get started in 5 minutes
+- **[Examples](examples/)** - Usage examples and integrations
+- **[Configuration](config/)** - Setup and customization
+
+---
+
+## 🤝 **Contributing**
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+---
+
+## 📧 **Support**
+
+- **Issues**: [GitHub Issues](https://github.com/jordanaftermidnight/multi-ai-integration-CLI/issues)
+- **Email**: jordanaftermidnight@users.noreply.github.com
+
+---
+
+## 📜 **License**
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+---
+
+**Transform your development workflow with professional AI intelligence! 🚀**
