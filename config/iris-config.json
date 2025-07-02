@@ -1,0 +1,92 @@
+{
+  "_comment": "Configuration for Iris - Multi-AI Chat Assistant",
+  "providers": {
+    "ollama": {
+      "host": "http://localhost:11434",
+      "timeout": 30000,
+      "maxRetries": 3,
+      "priority": 1,
+      "models": {
+        "fast": "qwen2.5:7b",
+        "balanced": "mistral:7b",
+        "creative": "llama3.2:latest",
+        "code": "qwen2.5-coder:7b",
+        "large": "qwen2.5:14b",
+        "complex": "qwen2.5:14b",
+        "vision": "llava:7b",
+        "reasoning": "qwen2.5:14b"
+      }
+    },
+    "gemini": {
+      "priority": 2,
+      "models": {
+        "fast": "gemini-1.5-flash",
+        "balanced": "gemini-1.5-pro",
+        "creative": "gemini-1.5-pro",
+        "code": "gemini-1.5-pro",
+        "large": "gemini-1.5-pro",
+        "complex": "gemini-1.5-pro"
+      },
+      "rateLimit": {
+        "requestsPerMinute": 60,
+        "requestsPerDay": 1000
+      },
+      "timeout": 15000
+    },
+    "claude": {
+      "priority": 3,
+      "models": {
+        "fast": "claude-3-haiku-20240307",
+        "balanced": "claude-3-sonnet-20240229",
+        "creative": "claude-3-opus-20240229",
+        "code": "claude-3-5-sonnet-20241022",
+        "large": "claude-3-opus-20240229",
+        "complex": "claude-3-opus-20240229"
+      },
+      "maxTokens": 4096,
+      "rateLimit": {
+        "requestsPerMinute": 50,
+        "requestsPerDay": 800
+      },
+      "timeout": 20000
+    }
+  },
+  "routing": {
+    "preferLocal": true,
+    "maxCost": 0.05,
+    "costOptimization": true,
+    "fallbackOrder": ["ollama", "gemini", "claude"],
+    "taskRoutingRules": {
+      "code": ["ollama", "claude", "gemini"],
+      "creative": ["ollama", "gemini", "claude"],
+      "fast": ["ollama"],
+      "complex": ["ollama", "claude", "gemini"],
+      "analysis": ["ollama", "gemini", "claude"],
+      "balanced": ["ollama", "gemini", "claude"]
+    }
+  },
+  "context": {
+    "maxLength": 20,
+    "autoTrim": true,
+    "trimPercentage": 0.8
+  },
+  "knowledgeBase": {
+    "maxEntries": 1000,
+    "cleanupThreshold": 0.2
+  },
+  "security": {
+    "maxFileSize": 1048576,
+    "allowedExtensions": [".js", ".ts", ".py", ".md", ".txt", ".json", ".yaml", ".yml"],
+    "restrictToProjectDir": true
+  },
+  "performance": {
+    "requestTimeout": 30000,
+    "maxConcurrentRequests": 5,
+    "cacheEnabled": false
+  },
+  "logging": {
+    "level": "info",
+    "sanitizeApiKeys": true,
+    "logRequests": true
+  }
+}
