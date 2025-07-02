@@ -1,6 +1,6 @@
 {
   "name": "iris-ai",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Iris - Integrated Runtime Intelligence Service with smart provider selection, supporting Ollama, Gemini, and Claude",
   "main": "src/enhanced-ai.js",
   "type": "module",
@@ -16,6 +16,8 @@
     "health": "node src/enhanced-ai.js health",
     "models": "node src/enhanced-ai.js models",
     "providers": "node src/enhanced-ai.js providers",
+    "postinstall": "node setup.js",
+    "setup": "node setup.js",
     "lint": "eslint src/ tests/ examples/",
     "lint:fix": "eslint src/ tests/ examples/ --fix",
     "validate": "npm run lint && npm test",
@@ -39,12 +41,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jordanaftermidnight/multi-ai-mcp-integration.git"
+    "url": "https://github.com/jordanaftermidnight/multi-ai-integration-CLI.git"
   },
   "bugs": {
-    "url": "https://github.com/jordanaftermidnight/multi-ai-mcp-integration/issues"
+    "url": "https://github.com/jordanaftermidnight/multi-ai-integration-CLI/issues"
   },
-  "homepage": "https://github.com/jordanaftermidnight/multi-ai-mcp-integration#readme",
+  "homepage": "https://github.com/jordanaftermidnight/multi-ai-integration-CLI#readme",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.3",
     "@google/generative-ai": "^0.21.0",
