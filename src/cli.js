@@ -42,7 +42,7 @@ function parseArgs(args) {
  */
 function showHelp() {
   console.log(`
-🤖 Multi-AI Integration CLI v2.2.0
+🤖 Multi-AI Integration CLI v2.3.0
 ====================================
 Cost-Optimized AI with Mistral-First Logic
 
@@ -62,11 +62,14 @@ COMMANDS:
   help                        Show this help message
 
 TASK TYPES:
-  --task=code                 Programming, debugging, code review
-  --task=creative             Writing, brainstorming, creative tasks  
-  --task=fast                 Quick questions, simple queries
-  --task=complex              Analysis, research, complex reasoning
-  --task=balanced             General purpose (default)
+  --task=code                 Programming, debugging, code review (Ollama → OpenAI)
+  --task=creative             Writing, brainstorming, creative tasks (Ollama → Gemini)
+  --task=fast                 Quick questions, simple queries (Ollama → Groq)
+  --task=complex              Analysis, research, complex reasoning (OpenAI → Ollama)
+  --task=reasoning            Advanced logical reasoning (OpenAI → Ollama)
+  --task=vision               Image analysis and description (OpenAI → Ollama)
+  --task=ultra_fast           Lightning-fast responses (Groq preferred)
+  --task=balanced             General purpose (default) (Ollama first)
 
 OPTIONS:
   --stream                    Enable streaming responses
@@ -82,13 +85,18 @@ EXAMPLES:
   multi-ai health
 
 ENVIRONMENT VARIABLES:
+  OPENAI_API_KEY             OpenAI API key for o1/GPT-4o models (optional)
+  GROQ_API_KEY               Groq API key for ultra-fast inference (optional)
   GEMINI_API_KEY             Google Gemini API key (optional)
   ANTHROPIC_API_KEY          Anthropic Claude API key (optional)
   OLLAMA_HOST                Ollama server host (default: http://localhost:11434)
 
-COST OPTIMIZATION:
-  🆓 Primary: Mistral 7B via Ollama (free, local)
-  💰 Fallback: Gemini/Claude (paid, cloud) - only when needed
+PROVIDER HIERARCHY (Cost-Optimized):
+  🆓 PRIMARY: Ollama (Qwen 2.5, Mistral, DeepSeek-Coder) - Free, Local
+  🔥 SPEED: Groq (Llama 3.1, Mixtral) - Ultra-fast, Low cost
+  🧠 REASONING: OpenAI (o1-preview, GPT-4o) - Best performance
+  🎨 CREATIVE: Gemini (1.5 Pro/Flash) - Multimodal
+  📝 FALLBACK: Claude (3.5 Sonnet) - General purpose
 
 For more information, visit: https://github.com/jordanaftermidnight/multi-ai-integration-cli
 `);

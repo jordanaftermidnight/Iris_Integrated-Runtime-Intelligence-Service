@@ -14,7 +14,12 @@ export class OllamaProvider {
       balanced: 'mistral:7b',
       creative: 'llama3.2:latest',
       code: 'mistral:7b',
-      large: 'mistral:7b'
+      large: 'mistral:7b',
+      complex: 'mistral:7b',
+      reasoning: 'mistral:7b',
+      vision: 'llama3.2:latest',
+      coding_expert: 'mistral:7b',
+      ultra_large: 'mistral:7b'
     };
     this.priority = 1; // High priority for local models
     this.costPerToken = 0; // Free local models

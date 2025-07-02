@@ -6,6 +6,8 @@ import { AIRouter } from './core/ai-router.js';
 import { OllamaProvider } from './providers/ollama-provider.js';
 import { GeminiProvider } from './providers/gemini-provider.js';
 import { ClaudeProvider } from './providers/claude-provider.js';
+import { OpenAIProvider } from './providers/openai-provider.js';
+import { GroqProvider } from './providers/groq-provider.js';
 
 /**
  * Enhanced Multi-AI Integration System
@@ -20,8 +22,10 @@ export class MultiAI {
     this.initialized = false;
     this.providerStatus = {
       ollama: { available: false, status: 'unknown', priority: 1 },
-      gemini: { available: false, status: 'unknown', priority: 2 },
-      claude: { available: false, status: 'unknown', priority: 3 }
+      groq: { available: false, status: 'unknown', priority: 2 },
+      openai: { available: false, status: 'unknown', priority: 3 },
+      gemini: { available: false, status: 'unknown', priority: 4 },
+      claude: { available: false, status: 'unknown', priority: 5 }
     };
   }
 
@@ -40,8 +44,8 @@ export class MultiAI {
       // Initialize optional providers silently
       await this.initializeOptionalProviders(options);
       
-      // Set fallback order prioritizing cost efficiency
-      this.router.setFallbackOrder(['ollama', 'gemini', 'claude']);
+      // Set fallback order prioritizing cost efficiency and performance
+      this.router.setFallbackOrder(['ollama', 'groq', 'openai', 'gemini', 'claude']);
       
       this.initialized = true;
       return this.getProviderStatus();
@@ -88,81 +92,86 @@ export class MultiAI {
    * Initialize optional providers (Gemini, Claude)
    */
   async initializeOptionalProviders(options = {}) {
-    // Initialize Claude if API key available
-    if (process.env.ANTHROPIC_API_KEY || this.config.providers?.claude?.apiKey) {
-      try {
-        const claudeProvider = new ClaudeProvider({
-          apiKey: process.env.ANTHROPIC_API_KEY || this.config.providers?.claude?.apiKey
-        });
-        claudeProvider.priority = 3;
-        this.router.registerProvider(claudeProvider);
-        
-        const isAvailable = await claudeProvider.isAvailable();
-        this.providerStatus.claude = {
-          available: isAvailable,
-          status: isAvailable ? 'healthy' : 'unavailable',
-          priority: 3,
-          type: 'cloud',
-          cost: 'paid'
-        };
-      } catch (error) {
-        this.providerStatus.claude = {
-          available: false,
-          status: 'error',
-          priority: 3,
-          type: 'cloud',
-          cost: 'paid',
-          error: 'API initialization failed'
-        };
-      }
-    } else {
-      // No API key provided
-      this.providerStatus.claude = {
-        available: false,
-        status: 'no_api_key',
-        priority: 3,
-        type: 'cloud',
-        cost: 'paid',
-        message: 'Set ANTHROPIC_API_KEY to enable'
-      };
-    }
+    // Initialize Groq if API key available (fastest responses)
+    await this.initializeProvider('groq', GroqProvider, 'GROQ_API_KEY', {
+      priority: 2,
+      type: 'cloud',
+      cost: 'low',
+      description: 'Ultra-fast inference'
+    });
 
-    // Initialize Gemini if API key available  
-    if (process.env.GEMINI_API_KEY || this.config.providers?.gemini?.apiKey) {
+    // Initialize OpenAI if API key available (best reasoning)
+    await this.initializeProvider('openai', OpenAIProvider, 'OPENAI_API_KEY', {
+      priority: 3,
+      type: 'cloud', 
+      cost: 'medium',
+      description: 'Advanced reasoning with o1 models'
+    });
+
+    // Initialize Gemini if API key available
+    await this.initializeProvider('gemini', GeminiProvider, 'GEMINI_API_KEY', {
+      priority: 4,
+      type: 'cloud',
+      cost: 'medium',
+      description: 'Google\'s multimodal AI'
+    });
+
+    // Initialize Claude if API key available
+    await this.initializeProvider('claude', ClaudeProvider, 'ANTHROPIC_API_KEY', {
+      priority: 5,
+      type: 'cloud',
+      cost: 'high',
+      description: 'Anthropic\'s reasoning AI'
+    });
+  }
+
+  /**
+   * Generic provider initialization with robust error handling
+   */
+  async initializeProvider(name, ProviderClass, envKey, config) {
+    const apiKey = process.env[envKey] || this.config.providers?.[name]?.apiKey;
+    
+    if (apiKey) {
       try {
-        const geminiProvider = new GeminiProvider({
-          apiKey: process.env.GEMINI_API_KEY || this.config.providers?.gemini?.apiKey
-        });
-        geminiProvider.priority = 2;
-        this.router.registerProvider(geminiProvider);
+        const provider = new ProviderClass({ apiKey });
+        provider.priority = config.priority;
+        this.router.registerProvider(provider);
         
-        const isAvailable = await geminiProvider.isAvailable();
-        this.providerStatus.gemini = {
+        const isAvailable = await provider.isAvailable();
+        this.providerStatus[name] = {
           available: isAvailable,
           status: isAvailable ? 'healthy' : 'unavailable',
-          priority: 2,
-          type: 'cloud',
-          cost: 'paid'
+          priority: config.priority,
+          type: config.type,
+          cost: config.cost,
+          description: config.description
         };
+        
+        if (isAvailable && name !== 'ollama') {
+          console.log(`✅ ${name.toUpperCase()} ready - ${config.description}`);
+        }
       } catch (error) {
-        this.providerStatus.gemini = {
+        this.providerStatus[name] = {
           available: false,
           status: 'error',
-          priority: 2,
-          type: 'cloud',
-          cost: 'paid',
-          error: 'API initialization failed'
+          priority: config.priority,
+          type: config.type,
+          cost: config.cost,
+          error: 'Initialization failed',
+          description: config.description
         };
+        console.warn(`⚠️  ${name.toUpperCase()} initialization failed: ${error.message}`);
       }
     } else {
       // No API key provided
-      this.providerStatus.gemini = {
+      this.providerStatus[name] = {
         available: false,
         status: 'no_api_key',
-        priority: 2,
-        type: 'cloud',
-        cost: 'paid',
-        message: 'Set GEMINI_API_KEY to enable'
+        priority: config.priority,
+        type: config.type,
+        cost: config.cost,
+        message: `Set ${envKey} to enable`,
+        description: config.description
       };
     }
   }
@@ -491,7 +500,7 @@ Please provide insights about:
     
     return {
       timestamp: new Date().toISOString(),
-      version: '2.2.0',
+      version: '2.3.0',
       providers: {
         ...providerStatus,
         details: healthChecks

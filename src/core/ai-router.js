@@ -82,29 +82,46 @@ export class AIRouter {
       // Strong bonus for Ollama/Mistral to minimize API costs
       if (name === 'ollama') score += 25;
 
-      // Enhanced task-specific routing with new task types
+      // Enhanced task-specific routing with all providers
+      
+      // Ollama (free, local) - prioritize for most tasks
       if (taskType === 'fast' && name === 'ollama') score += 25;
       if (taskType === 'code' && name === 'ollama') score += 20;
       if (taskType === 'creative' && name === 'ollama') score += 15;
       if (taskType === 'analysis' && name === 'ollama') score += 10;
       if (taskType === 'vision' && name === 'ollama') score += 15;
-      if (taskType === 'reasoning' && name === 'ollama') score += 10;
+      if (taskType === 'reasoning' && name === 'ollama') score += 8; // Slightly lower for complex reasoning
       
-      // Specialized tasks for cloud providers
-      if (taskType === 'complex' && name === 'claude') score += 15;
-      if (taskType === 'reasoning' && name === 'claude') score += 12;
-      if (taskType === 'creative' && name === 'gemini') score += 8;
-      if (taskType === 'analysis' && name === 'gemini') score += 8;
-      if (taskType === 'vision' && name === 'claude') score += 10;
+      // Groq - ultra-fast responses, low cost
+      if (taskType === 'fast' && name === 'groq') score += 22;
+      if (taskType === 'code' && name === 'groq') score += 15;
+      if (taskType === 'creative' && name === 'groq') score += 12;
+      if (taskType === 'balanced' && name === 'groq') score += 10;
       
-      // GitHub/coding specific optimizations
+      // OpenAI - best for complex reasoning and advanced coding
+      if (taskType === 'complex' && name === 'openai') score += 20;
+      if (taskType === 'reasoning' && name === 'openai') score += 25;
+      if (taskType === 'code' && name === 'openai') score += 18;
+      if (taskType === 'analysis' && name === 'openai') score += 15;
+      if (taskType === 'vision' && name === 'openai') score += 20;
+      
+      // Gemini - multimodal and creative tasks
+      if (taskType === 'creative' && name === 'gemini') score += 12;
+      if (taskType === 'analysis' && name === 'gemini') score += 10;
+      if (taskType === 'vision' && name === 'gemini') score += 15;
+      if (taskType === 'multimodal' && name === 'gemini') score += 18;
+      
+      // Claude - general reasoning (lower priority due to cost)
+      if (taskType === 'complex' && name === 'claude') score += 10;
+      if (taskType === 'reasoning' && name === 'claude') score += 8;
+      if (taskType === 'creative' && name === 'claude') score += 6;
+      if (taskType === 'analysis' && name === 'claude') score += 6;
+      
+      // Specialized task routing
       if (taskType === 'github' && name === 'ollama') score += 20;
       if (taskType === 'build' && name === 'ollama') score += 18;
-      if (taskType === 'deploy' && name === 'claude') score += 10;
-      
-      // Media generation preferences
-      if (taskType === 'image' && name === 'claude') score += 12;
-      if (taskType === 'video' && name === 'gemini') score += 10;
+      if (taskType === 'deploy' && name === 'openai') score += 12;
+      if (taskType === 'ultra_fast' && name === 'groq') score += 30;
 
       // Privacy preference
       if (options.preferLocal && provider.getCapabilities().privacy === 'local') {

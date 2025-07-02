@@ -1,6 +1,6 @@
 {
   "name": "multi-ai-integration-cli",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Enhanced Multi-AI Integration CLI with smart provider selection, supporting Ollama, Gemini, and Claude",
   "main": "src/enhanced-ai.js",
   "type": "module",
@@ -47,9 +47,11 @@
   },
   "homepage": "https://github.com/jordanaftermidnight/multi-ai-mcp-integration#readme",
   "dependencies": {
-    "ollama": "^0.5.16",
     "@anthropic-ai/sdk": "^0.27.3",
-    "@google/generative-ai": "^0.21.0"
+    "@google/generative-ai": "^0.21.0",
+    "groq-sdk": "^0.26.0",
+    "ollama": "^0.5.16",
+    "openai": "^5.8.2"
   },
   "devDependencies": {
     "eslint": "^8.0.0"
