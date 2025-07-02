@@ -447,7 +447,7 @@ Please provide insights about:
     
     return {
       timestamp: new Date().toISOString(),
-      version: '2.1.0',
+      version: '2.2.0',
       providers: {
         ...providerStatus,
         details: healthChecks

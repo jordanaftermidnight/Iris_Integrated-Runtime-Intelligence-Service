@@ -34,11 +34,13 @@ export class ClaudeProvider {
     
     this.models = {
       fast: 'claude-3-haiku-20240307',
-      balanced: 'claude-3-sonnet-20240229', 
-      creative: 'claude-3-opus-20240229',
+      balanced: 'claude-3-5-sonnet-20241022', 
+      creative: 'claude-3-5-sonnet-20241022',
       code: 'claude-3-5-sonnet-20241022',
-      large: 'claude-3-opus-20240229',
-      complex: 'claude-3-opus-20240229'
+      large: 'claude-3-5-sonnet-20241022',
+      complex: 'claude-3-5-sonnet-20241022',
+      vision: 'claude-3-5-sonnet-20241022',
+      reasoning: 'claude-3-5-sonnet-20241022'
     };
     
     this.priority = 1; // High priority for reasoning tasks

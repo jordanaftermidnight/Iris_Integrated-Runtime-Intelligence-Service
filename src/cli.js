@@ -42,7 +42,7 @@ function parseArgs(args) {
  */
 function showHelp() {
   console.log(`
-🤖 Multi-AI Integration CLI v2.1.0
+🤖 Multi-AI Integration CLI v2.2.0
 ====================================
 Cost-Optimized AI with Mistral-First Logic
 

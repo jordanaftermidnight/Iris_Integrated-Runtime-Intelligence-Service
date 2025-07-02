@@ -82,16 +82,29 @@ export class AIRouter {
       // Strong bonus for Ollama/Mistral to minimize API costs
       if (name === 'ollama') score += 25;
 
-      // Task-specific bonuses (reduced to prioritize cost efficiency)
-      if (taskType === 'fast' && name === 'ollama') score += 20;
-      if (taskType === 'creative' && name === 'ollama') score += 10; // Prefer Mistral even for creative
-      if (taskType === 'code' && name === 'ollama') score += 15;
+      // Enhanced task-specific routing with new task types
+      if (taskType === 'fast' && name === 'ollama') score += 25;
+      if (taskType === 'code' && name === 'ollama') score += 20;
+      if (taskType === 'creative' && name === 'ollama') score += 15;
       if (taskType === 'analysis' && name === 'ollama') score += 10;
+      if (taskType === 'vision' && name === 'ollama') score += 15;
+      if (taskType === 'reasoning' && name === 'ollama') score += 10;
       
-      // Only use paid providers when local isn't available or for complex tasks
-      if (taskType === 'complex' && name === 'claude') score += 8;
-      if (taskType === 'creative' && name === 'gemini') score += 5;
-      if (taskType === 'analysis' && name === 'gemini') score += 5;
+      // Specialized tasks for cloud providers
+      if (taskType === 'complex' && name === 'claude') score += 15;
+      if (taskType === 'reasoning' && name === 'claude') score += 12;
+      if (taskType === 'creative' && name === 'gemini') score += 8;
+      if (taskType === 'analysis' && name === 'gemini') score += 8;
+      if (taskType === 'vision' && name === 'claude') score += 10;
+      
+      // GitHub/coding specific optimizations
+      if (taskType === 'github' && name === 'ollama') score += 20;
+      if (taskType === 'build' && name === 'ollama') score += 18;
+      if (taskType === 'deploy' && name === 'claude') score += 10;
+      
+      // Media generation preferences
+      if (taskType === 'image' && name === 'claude') score += 12;
+      if (taskType === 'video' && name === 'gemini') score += 10;
 
       // Privacy preference
       if (options.preferLocal && provider.getCapabilities().privacy === 'local') {
