@@ -302,6 +302,11 @@ export class MultiAI {
       throw new Error('Message too long (maximum 10,000 characters)');
     }
 
+    // Check if a specific provider is forced
+    if (options.provider) {
+      return await this.chatWithProvider(message, options.provider, options);
+    }
+
     try {
       // Mistral-first decision logic
       const decision = await this.shouldUseMistral(message, options);
@@ -359,6 +364,48 @@ export class MultiAI {
         preferLocal: false,
         taskType: 'complex'
       });
+    }
+  }
+
+  /**
+   * Chat with a specific provider (forced selection)
+   */
+  async chatWithProvider(message, providerName, options = {}) {
+    const provider = this.router.providers.get(providerName);
+    
+    if (!provider) {
+      throw new Error(`Provider '${providerName}' not found. Available providers: ${Array.from(this.router.providers.keys()).join(', ')}`);
+    }
+
+    const isAvailable = await provider.isAvailable();
+    if (!isAvailable) {
+      throw new Error(`Provider '${providerName}' is not available. Check configuration and API keys.`);
+    }
+
+    console.log(`🎯 Forcing provider: ${providerName}`);
+
+    try {
+      const startTime = Date.now();
+      const result = await provider.chat(message, options);
+      const responseTime = Date.now() - startTime;
+
+      // Update provider statistics
+      this.router.updateProviderStats(providerName, true, responseTime, result.usage?.cost || 0);
+
+      // Update conversation context
+      this.updateContext(message, result.response);
+
+      return {
+        ...result,
+        contextLength: this.context.length,
+        forced: true,
+        providerName,
+        sanitized: true
+      };
+
+    } catch (error) {
+      this.router.updateProviderStats(providerName, false, 0, 0);
+      throw new Error(`Provider '${providerName}' failed: ${this.sanitizeError(error.message)}`);
     }
   }
 

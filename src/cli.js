@@ -23,6 +23,12 @@ function parseArgs(args) {
     result.options.taskType = taskArg.split('=')[1];
   }
 
+  // Extract provider flag
+  const providerArg = args.find(arg => arg.startsWith('--provider='));
+  if (providerArg) {
+    result.options.provider = providerArg.split('=')[1];
+  }
+
   // Extract other flags
   result.options.stream = args.includes('--stream');
   result.options.local = args.includes('--local');
@@ -72,6 +78,7 @@ TASK TYPES:
   --task=balanced             General purpose (default) (Ollama first)
 
 OPTIONS:
+  --provider=<name>           Force specific provider (ollama, gemini, groq, openai, claude)
   --stream                    Enable streaming responses
   --local                     Prefer local providers only
   --verbose, -v               Enable verbose output
@@ -80,6 +87,7 @@ OPTIONS:
 EXAMPLES:
   multi-ai chat "Hello, how are you?"
   multi-ai chat "Write a Python function" --task=code
+  multi-ai chat "What is 2+2?" --provider=gemini
   multi-ai file ./my-script.js --task=code --verbose
   multi-ai providers
   multi-ai health
