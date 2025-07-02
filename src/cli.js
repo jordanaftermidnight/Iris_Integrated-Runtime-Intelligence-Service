@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import MultiAI from './index.js';
+import IDECommands from './commands/vscode-commands.js';
 
 /**
  * Enhanced Multi-AI Integration CLI
@@ -67,6 +68,17 @@ COMMANDS:
   clear                       Clear conversation context
   help                        Show this help message
 
+IDE INTEGRATION COMMANDS:
+  complete <file> <line> <col> Intelligent code completion suggestions
+  explain <file> [start] [end] Detailed code explanation and analysis
+  refactor <file> <start> <end> Smart refactoring recommendations
+  debug <file> [error] [trace] Advanced debugging with error context
+  commit                      Generate intelligent commit messages
+  review <file> [start] [end] Comprehensive code review and analysis
+  test <file> [function]      Generate test cases and scenarios
+  workspace                   Complete workspace and project analysis
+  context <file>              Smart file context and dependency analysis
+
 TASK TYPES:
   --task=code                 Programming, debugging, code review (Ollama → OpenAI)
   --task=creative             Writing, brainstorming, creative tasks (Ollama → Gemini)
@@ -91,6 +103,17 @@ EXAMPLES:
   iris file ./my-script.js --task=code --verbose
   iris providers
   iris health
+
+IDE INTEGRATION EXAMPLES:
+  iris complete ./src/index.js 42 15    # Smart completions at line 42, col 15
+  iris explain ./utils.py 10 25         # Explain code section lines 10-25
+  iris refactor ./api.js 100 150        # Refactoring suggestions for lines 100-150
+  iris debug ./app.js "TypeError" trace.txt  # Debug with error and stack trace
+  iris commit                           # Generate smart commit message
+  iris review ./components/Header.jsx   # Comprehensive code review
+  iris test ./math.js calculateSum      # Generate tests for calculateSum function
+  iris workspace                       # Analyze entire project structure
+  iris context ./src/database.js       # Get intelligent file context
 
 ENVIRONMENT VARIABLES:
   OPENAI_API_KEY             OpenAI API key for o1/GPT-4o models (optional)
@@ -126,6 +149,7 @@ async function runCLI() {
 
   // Initialize AI system
   const ai = new MultiAI();
+  const ideCommands = new IDECommands(ai);
   
   try {
     // Initialize providers with startup message
@@ -171,6 +195,43 @@ async function runCLI() {
 
       case 'clear':
         await handleClearCommand(ai, options);
+        break;
+
+      // IDE integration commands
+      case 'complete':
+        await handleCompleteCommand(ideCommands, args, options);
+        break;
+
+      case 'explain':
+        await handleExplainCommand(ideCommands, args, options);
+        break;
+
+      case 'refactor':
+        await handleRefactorCommand(ideCommands, args, options);
+        break;
+
+      case 'debug':
+        await handleDebugCommand(ideCommands, args, options);
+        break;
+
+      case 'commit':
+        await handleCommitCommand(ideCommands, options);
+        break;
+
+      case 'review':
+        await handleReviewCommand(ideCommands, args, options);
+        break;
+
+      case 'test':
+        await handleTestCommand(ideCommands, args, options);
+        break;
+
+      case 'workspace':
+        await handleWorkspaceCommand(ideCommands, options);
+        break;
+
+      case 'context':
+        await handleContextCommand(ideCommands, args, options);
         break;
 
       default:
@@ -434,6 +495,122 @@ async function handleClearCommand(ai, options) {
   if (options.verbose) {
     console.log('All conversation history has been removed from memory.');
   }
+}
+
+// ============================================
+// IDE Integration Command Handlers
+// ============================================
+
+/**
+ * Handle code completion command
+ */
+async function handleCompleteCommand(ideCommands, args, options) {
+  const [, filePath, line, column] = args;
+  
+  if (!filePath || !line || !column) {
+    console.error('❌ Usage: iris complete <file> <line> <column>');
+    return;
+  }
+  
+  return await ideCommands.complete(filePath, line, column, options);
+}
+
+/**
+ * Handle code explanation command
+ */
+async function handleExplainCommand(ideCommands, args, options) {
+  const [, filePath, startLine, endLine] = args;
+  
+  if (!filePath) {
+    console.error('❌ Usage: iris explain <file> [startLine] [endLine]');
+    return;
+  }
+  
+  return await ideCommands.explain(filePath, startLine, endLine, options);
+}
+
+/**
+ * Handle code refactoring command
+ */
+async function handleRefactorCommand(ideCommands, args, options) {
+  const [, filePath, startLine, endLine, refactorType] = args;
+  
+  if (!filePath || !startLine || !endLine) {
+    console.error('❌ Usage: iris refactor <file> <startLine> <endLine> [type]');
+    return;
+  }
+  
+  return await ideCommands.refactor(filePath, startLine, endLine, refactorType, options);
+}
+
+/**
+ * Handle debug command
+ */
+async function handleDebugCommand(ideCommands, args, options) {
+  const [, filePath, errorMessage, stackTrace] = args;
+  
+  if (!filePath) {
+    console.error('❌ Usage: iris debug <file> [errorMessage] [stackTraceFile]');
+    return;
+  }
+  
+  return await ideCommands.debug(filePath, errorMessage, stackTrace, options);
+}
+
+/**
+ * Handle commit message generation command
+ */
+async function handleCommitCommand(ideCommands, options) {
+  return await ideCommands.commit(options);
+}
+
+/**
+ * Handle code review command
+ */
+async function handleReviewCommand(ideCommands, args, options) {
+  const [, filePath, startLine, endLine] = args;
+  
+  if (!filePath) {
+    console.error('❌ Usage: iris review <file> [startLine] [endLine]');
+    return;
+  }
+  
+  return await ideCommands.review(filePath, startLine, endLine, options);
+}
+
+/**
+ * Handle test generation command
+ */
+async function handleTestCommand(ideCommands, args, options) {
+  const [, filePath, functionName] = args;
+  
+  if (!filePath) {
+    console.error('❌ Usage: iris test <file> [functionName]');
+    return;
+  }
+  
+  return await ideCommands.generateTests(filePath, functionName, options);
+}
+
+/**
+ * Handle workspace analysis command
+ */
+async function handleWorkspaceCommand(ideCommands, options) {
+  return await ideCommands.workspace(options);
+}
+
+/**
+ * Handle file context analysis command
+ */
+async function handleContextCommand(ideCommands, args, options) {
+  const [, filePath] = args;
+  
+  if (!filePath) {
+    console.error('❌ Usage: iris context <file>');
+    return;
+  }
+  
+  return await ideCommands.context(filePath, options);
 }
 
 // Run CLI if this file is executed directly
