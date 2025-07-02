@@ -5,6 +5,7 @@ import path from 'path';
 import { AIRouter } from './core/ai-router.js';
 import { OllamaProvider } from './providers/ollama-provider.js';
 import { GeminiProvider } from './providers/gemini-provider.js';
+import { ClaudeProvider } from './providers/claude-provider.js';
 
 /**
  * Enhanced Multi-AI Integration System
@@ -27,11 +28,26 @@ export class MultiAI {
     console.log('🚀 Initializing AI providers...');
     
     try {
-      // Initialize Ollama (local models)
+      // Initialize Ollama (local models - highest priority for cost efficiency)
       const ollamaProvider = new OllamaProvider({
         host: options.ollamaHost || this.config.providers?.ollama?.host
       });
+      // Set highest priority for Mistral/Ollama to minimize paid API usage
+      ollamaProvider.priority = 1; 
       this.router.registerProvider(ollamaProvider);
+
+      // Initialize Claude (if API key available)
+      if (process.env.ANTHROPIC_API_KEY || this.config.providers?.claude?.apiKey) {
+        try {
+          const claudeProvider = new ClaudeProvider({
+            apiKey: process.env.ANTHROPIC_API_KEY || this.config.providers?.claude?.apiKey
+          });
+          claudeProvider.priority = 3; // Lower priority to minimize cost
+          this.router.registerProvider(claudeProvider);
+        } catch (error) {
+          console.warn('⚠️  Claude provider initialization failed:', this.sanitizeError(error.message));
+        }
+      }
 
       // Initialize Gemini (if API key available)
       if (process.env.GEMINI_API_KEY || this.config.providers?.gemini?.apiKey) {
@@ -39,14 +55,15 @@ export class MultiAI {
           const geminiProvider = new GeminiProvider({
             apiKey: process.env.GEMINI_API_KEY || this.config.providers?.gemini?.apiKey
           });
+          geminiProvider.priority = 2; // Medium priority
           this.router.registerProvider(geminiProvider);
         } catch (error) {
           console.warn('⚠️  Gemini provider initialization failed:', this.sanitizeError(error.message));
         }
       }
 
-      // Set fallback order
-      this.router.setFallbackOrder(['ollama', 'gemini']);
+      // Set fallback order prioritizing cost efficiency (Ollama/Mistral first)
+      this.router.setFallbackOrder(['ollama', 'gemini', 'claude']);
 
       // Check provider availability
       const results = await this.router.healthCheckAll();
@@ -275,12 +292,19 @@ Please provide insights about:
           rateLimit: {
             requestsPerMinute: 60
           }
+        },
+        claude: {
+          maxTokens: 4096,
+          rateLimit: {
+            requestsPerMinute: 50
+          }
         }
       },
       routing: {
         preferLocal: true,
-        maxCost: 0.10,
-        fallbackOrder: ['ollama', 'gemini']
+        maxCost: 0.05, // Lower cost limit to prioritize free Ollama
+        fallbackOrder: ['ollama', 'gemini', 'claude'],
+        costOptimization: true
       },
       context: {
         maxLength: 20

@@ -75,15 +75,23 @@ export class AIRouter {
       const speedScore = stats.avgResponseTime > 0 ? Math.max(0, 100 - stats.avgResponseTime / 100) : 50;
       score += speedScore * 20;
 
-      // Cost score (lower cost = higher score, but local models get bonus)
-      const costScore = cost === 0 ? 30 : Math.max(0, 30 - cost * 1000);
+      // Cost score (heavily favor free local models)
+      const costScore = cost === 0 ? 50 : Math.max(0, 30 - cost * 1000);
       score += costScore;
 
-      // Task-specific bonuses
-      if (taskType === 'fast' && name === 'ollama') score += 15;
-      if (taskType === 'creative' && name === 'gemini') score += 15;
-      if (taskType === 'code' && (name === 'ollama' || name === 'claude')) score += 10;
-      if (taskType === 'analysis' && name === 'gemini') score += 10;
+      // Strong bonus for Ollama/Mistral to minimize API costs
+      if (name === 'ollama') score += 25;
+
+      // Task-specific bonuses (reduced to prioritize cost efficiency)
+      if (taskType === 'fast' && name === 'ollama') score += 20;
+      if (taskType === 'creative' && name === 'ollama') score += 10; // Prefer Mistral even for creative
+      if (taskType === 'code' && name === 'ollama') score += 15;
+      if (taskType === 'analysis' && name === 'ollama') score += 10;
+      
+      // Only use paid providers when local isn't available or for complex tasks
+      if (taskType === 'complex' && name === 'claude') score += 8;
+      if (taskType === 'creative' && name === 'gemini') score += 5;
+      if (taskType === 'analysis' && name === 'gemini') score += 5;
 
       // Privacy preference
       if (options.preferLocal && provider.getCapabilities().privacy === 'local') {

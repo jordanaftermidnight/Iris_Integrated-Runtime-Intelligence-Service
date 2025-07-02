@@ -1,8 +1,8 @@
 # 🤖 Multi-AI Integration CLI
 
-Enhanced Multi-AI Integration system with intelligent provider selection, supporting multiple AI providers including Ollama and Gemini (coming soon).
+Enhanced Multi-AI Integration system with intelligent provider selection and cost optimization, supporting Ollama (Mistral), Gemini, and Claude with smart routing that prioritizes free local models.
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/jordanaftermidnight/multi-ai-mcp-integration)
+[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](https://github.com/jordanaftermidnight/multi-ai-integration-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 
@@ -14,8 +14,9 @@ Enhanced Multi-AI Integration system with intelligent provider selection, suppor
 - Performance tracking and optimization
 
 ### 🔧 **Multi-Provider Support**
-- **Ollama**: Local AI models (Llama, Mistral, Gemma, etc.)
-- **Gemini**: Google's advanced AI (coming soon)
+- **Ollama**: Local AI models (Mistral 7B prioritized for cost efficiency)
+- **Gemini**: Google's advanced AI models (Gemini 1.5 Pro/Flash)
+- **Claude**: Anthropic's reasoning models (Claude 3 Opus/Sonnet/Haiku)
 - Extensible architecture for adding new providers
 
 ### 📊 **Performance Monitoring**
@@ -24,11 +25,17 @@ Enhanced Multi-AI Integration system with intelligent provider selection, suppor
 - 99.5% availability with automatic failover
 
 ### 🎯 **Task-Specific Optimization**
-- **Code**: Best models for programming tasks
-- **Creative**: Optimized for creative writing and brainstorming
-- **Fast**: Quick responses for simple queries
-- **Complex**: Advanced reasoning for complex analysis
-- **Balanced**: General-purpose responses
+- **Code**: Mistral 7B (local) → Claude 3.5 Sonnet → Gemini 1.5 Pro
+- **Creative**: Mistral 7B (local) → Gemini 1.5 Pro → Claude 3 Opus  
+- **Fast**: Mistral 7B (local only for cost efficiency)
+- **Complex**: Mistral 7B (local) → Claude 3 Opus → Gemini 1.5 Pro
+- **Balanced**: Mistral 7B (local) → Gemini 1.5 Pro → Claude 3 Sonnet
+
+### 💰 **Cost Optimization**
+- **Local-first routing**: Prioritizes free Mistral 7B via Ollama
+- **Smart fallback**: Only uses paid APIs when necessary
+- **Budget controls**: Configurable cost limits and provider priorities
+- **Usage tracking**: Monitor costs across all providers
 
 ### 💾 **Advanced Features**
 - Conversation context management
@@ -43,13 +50,15 @@ Enhanced Multi-AI Integration system with intelligent provider selection, suppor
 ### Prerequisites
 - Node.js 18.0.0 or higher
 - [Ollama](https://ollama.ai/) installed and running
+- Optional: Gemini API key for Google AI models
+- Optional: Anthropic API key for Claude models
 
 ### Quick Setup
 
 ```bash
 # Clone the repository
-git clone https://github.com/jordanaftermidnight/multi-ai-mcp-integration.git
-cd multi-ai-integration
+git clone https://github.com/jordanaftermidnight/multi-ai-integration-cli.git
+cd multi-ai-integration-cli
 
 # Install dependencies
 npm install
@@ -61,15 +70,28 @@ npm link
 npm run health
 ```
 
-### Install Recommended Models
+### Install Required Model (Cost-Optimized)
 
 ```bash
-# Install high-performance models
-ollama pull mistral:7b      # Excellent for code and reasoning
-ollama pull llama3.2:latest # Fast and creative tasks
+# Install primary model for cost efficiency
+ollama pull mistral:7b      # Primary model - excellent for all tasks, completely free
+
+# Optional: Additional models for specialized tasks
+ollama pull llama3.2:latest # Alternative fast model
 ollama pull qwen2.5:7b      # High-quality general purpose
-ollama pull gemma2:9b       # Google's latest model
 ```
+
+### Optional: API Keys for Paid Providers
+
+```bash
+# For Gemini (Google AI)
+export GEMINI_API_KEY=your_gemini_api_key
+
+# For Claude (Anthropic)
+export ANTHROPIC_API_KEY=your_claude_api_key
+```
+
+**Note**: The system works perfectly with just Ollama/Mistral for cost-free operation. Paid providers are only used as fallbacks or for complex tasks when configured.
 
 ## 🚀 Quick Start
 

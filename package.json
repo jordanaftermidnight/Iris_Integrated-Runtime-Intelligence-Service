@@ -1,7 +1,7 @@
 {
-  "name": "multi-ai-integration",
-  "version": "2.0.0",
-  "description": "Enhanced Multi-AI Integration CLI with smart provider selection, supporting Ollama and Gemini",
+  "name": "multi-ai-integration-cli",
+  "version": "2.1.0",
+  "description": "Enhanced Multi-AI Integration CLI with smart provider selection, supporting Ollama, Gemini, and Claude",
   "main": "src/enhanced-ai.js",
   "type": "module",
   "bin": {
@@ -22,9 +22,11 @@
   },
   "keywords": [
     "ai",
-    "llm",
+    "llm", 
     "ollama",
     "gemini",
+    "claude",
+    "anthropic",
     "cli",
     "multi-provider",
     "automation",
@@ -46,7 +48,8 @@
     "ollama": "^0.5.16"
   },
   "optionalDependencies": {
-    "@google/generative-ai": "^0.1.0"
+    "@google/generative-ai": "^0.1.0",
+    "@anthropic-ai/sdk": "^0.24.3"
   },
   "devDependencies": {
     "eslint": "^8.0.0"
