@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 
 // Optional import - gracefully handle missing dependency
-let GoogleGenerativeAI;
+let GoogleGenerativeAI = null;
+let importError = null;
+
 try {
   const module = await import('@google/generative-ai');
   GoogleGenerativeAI = module.GoogleGenerativeAI;
 } catch (error) {
-  console.warn('⚠️  Gemini provider unavailable: @google/generative-ai package not installed');
-  GoogleGenerativeAI = null;
+  importError = error;
+  // Don't log here - will be handled in constructor
 }
 
 /**

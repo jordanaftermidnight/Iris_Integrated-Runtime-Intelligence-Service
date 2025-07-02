@@ -42,8 +42,9 @@ function parseArgs(args) {
  */
 function showHelp() {
   console.log(`
-🤖 Enhanced Multi-AI Integration CLI v2.0.0
-=============================================
+🤖 Multi-AI Integration CLI v2.1.0
+====================================
+Cost-Optimized AI with Mistral-First Logic
 
 USAGE:
   multi-ai <command> [message] [options]
@@ -82,9 +83,14 @@ EXAMPLES:
 
 ENVIRONMENT VARIABLES:
   GEMINI_API_KEY             Google Gemini API key (optional)
+  ANTHROPIC_API_KEY          Anthropic Claude API key (optional)
   OLLAMA_HOST                Ollama server host (default: http://localhost:11434)
 
-For more information, visit: https://github.com/jordanaftermidnight/multi-ai-mcp-integration
+COST OPTIMIZATION:
+  🆓 Primary: Mistral 7B via Ollama (free, local)
+  💰 Fallback: Gemini/Claude (paid, cloud) - only when needed
+
+For more information, visit: https://github.com/jordanaftermidnight/multi-ai-integration-cli
 `);
 }
 
@@ -209,24 +215,35 @@ async function handleChatCommand(ai, message, options) {
  * Handle providers command
  */
 async function handleProvidersCommand(ai, options) {
-  console.log('\n📊 Provider Statistics:');
+  console.log('\n📊 Provider Status & Statistics:');
   
-  const stats = ai.router.getProviderStats();
-  const healthChecks = await ai.router.healthCheckAll();
+  // Show visual status first
+  ai.displayProviderStatus();
+  
+  if (options.verbose) {
+    console.log('\n📈 Detailed Statistics:');
+    const stats = ai.router.getProviderStats();
 
-  for (const [provider, data] of Object.entries(stats)) {
-    const health = healthChecks[provider];
-    const status = health?.status === 'healthy' ? '✅' : '❌';
+    for (const [provider, data] of Object.entries(stats)) {
+      console.log(`\n📋 ${provider.toUpperCase()} Statistics:`);
+      console.log(`   Requests: ${data.requests}`);
+      console.log(`   Success Rate: ${data.successRate}`);
+      console.log(`   Avg Response Time: ${data.avgResponseTime?.toFixed(2) || 0}ms`);
+      console.log(`   Total Cost: $${data.totalCost?.toFixed(4) || '0.0000'}`);
+      
+      if (data.capabilities) {
+        const features = Object.entries(data.capabilities)
+          .filter(([_, v]) => v === true)
+          .map(([k, _]) => k)
+          .join(', ');
+        console.log(`   Features: ${features || 'None'}`);
+      }
+    }
     
-    console.log(`\n${status} ${provider.toUpperCase()}:`);
-    console.log(`   Status: ${health?.status || 'unknown'}`);
-    console.log(`   Requests: ${data.requests}`);
-    console.log(`   Success Rate: ${data.successRate}`);
-    console.log(`   Avg Response Time: ${data.avgResponseTime?.toFixed(2) || 0}ms`);
-    console.log(`   Capabilities: ${Object.entries(data.capabilities || {})
-      .filter(([_, v]) => v === true)
-      .map(([k, _]) => k)
-      .join(', ')}`);
+    console.log('\n💡 Use --task flags to influence provider selection:');
+    console.log('   --task=fast    → Prioritizes speed (Mistral preferred)');
+    console.log('   --task=complex → Uses best reasoning model (Claude/Gemini fallback)');
+    console.log('   --task=code    → Optimizes for programming tasks');
   }
 }
 
@@ -306,31 +323,38 @@ async function handleDirectoryCommand(ai, dirPath, options) {
 async function handleHealthCommand(ai, options) {
   console.log('\n🏥 System Health Check:');
   
-  const healthChecks = await ai.router.healthCheckAll();
-  let healthyCount = 0;
-  let totalCount = 0;
-
-  for (const [provider, health] of Object.entries(healthChecks)) {
-    totalCount++;
-    const status = health.status === 'healthy' ? '✅' : '❌';
+  // Use new visual status display
+  ai.displayProviderStatus();
+  
+  if (options.verbose) {
+    const healthChecks = await ai.router.healthCheckAll();
+    console.log('\n🔍 Detailed Health Information:');
     
-    if (health.status === 'healthy') healthyCount++;
-    
-    console.log(`${status} ${provider}: ${health.status}`);
-    
-    if (options.verbose && health.models !== undefined) {
-      console.log(`   Models available: ${health.models}`);
-    }
-    
-    if (health.error) {
-      console.log(`   Error: ${health.error}`);
+    for (const [provider, health] of Object.entries(healthChecks)) {
+      console.log(`\n📋 ${provider.toUpperCase()}:`);
+      console.log(`   Status: ${health.status}`);
+      
+      if (health.models !== undefined) {
+        console.log(`   Models: ${health.models}`);
+      }
+      
+      if (health.error) {
+        console.log(`   Error: ${health.error}`);
+      }
+      
+      if (health.version) {
+        console.log(`   Version: ${health.version}`);
+      }
     }
   }
-
-  console.log(`\n📊 Overall: ${healthyCount}/${totalCount} providers healthy`);
   
-  if (healthyCount === 0) {
-    console.log('⚠️  No providers are currently available. Check your configuration.');
+  const status = ai.getProviderStatus();
+  if (status.summary.available === 0) {
+    console.log('\n⚠️  No providers are currently available. Check your configuration.');
+    console.log('💡 Make sure Ollama is running: ollama serve');
+  } else if (!status.ollama.available) {
+    console.log('\n⚠️  Primary provider (Mistral) unavailable - using fallback providers');
+    console.log('💡 Start Ollama for cost-optimized operation: ollama serve');
   }
 }
 

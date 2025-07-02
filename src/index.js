@@ -17,65 +17,211 @@ export class MultiAI {
     this.context = [];
     this.knowledgeBase = new Map();
     this.config = this.loadConfig(options.configPath);
-    
-    this.initializeProviders(options);
+    this.initialized = false;
+    this.providerStatus = {
+      ollama: { available: false, status: 'unknown', priority: 1 },
+      gemini: { available: false, status: 'unknown', priority: 2 },
+      claude: { available: false, status: 'unknown', priority: 3 }
+    };
   }
 
   /**
-   * Initialize AI providers
+   * Initialize AI providers with Mistral-first logic
    */
   async initializeProviders(options = {}) {
+    if (this.initialized) return this.getProviderStatus();
+    
     console.log('🚀 Initializing AI providers...');
     
     try {
-      // Initialize Ollama (local models - highest priority for cost efficiency)
-      const ollamaProvider = new OllamaProvider({
-        host: options.ollamaHost || this.config.providers?.ollama?.host
-      });
-      // Set highest priority for Mistral/Ollama to minimize paid API usage
-      ollamaProvider.priority = 1; 
-      this.router.registerProvider(ollamaProvider);
-
-      // Initialize Claude (if API key available)
-      if (process.env.ANTHROPIC_API_KEY || this.config.providers?.claude?.apiKey) {
-        try {
-          const claudeProvider = new ClaudeProvider({
-            apiKey: process.env.ANTHROPIC_API_KEY || this.config.providers?.claude?.apiKey
-          });
-          claudeProvider.priority = 3; // Lower priority to minimize cost
-          this.router.registerProvider(claudeProvider);
-        } catch (error) {
-          console.warn('⚠️  Claude provider initialization failed:', this.sanitizeError(error.message));
-        }
-      }
-
-      // Initialize Gemini (if API key available)
-      if (process.env.GEMINI_API_KEY || this.config.providers?.gemini?.apiKey) {
-        try {
-          const geminiProvider = new GeminiProvider({
-            apiKey: process.env.GEMINI_API_KEY || this.config.providers?.gemini?.apiKey
-          });
-          geminiProvider.priority = 2; // Medium priority
-          this.router.registerProvider(geminiProvider);
-        } catch (error) {
-          console.warn('⚠️  Gemini provider initialization failed:', this.sanitizeError(error.message));
-        }
-      }
-
-      // Set fallback order prioritizing cost efficiency (Ollama/Mistral first)
-      this.router.setFallbackOrder(['ollama', 'gemini', 'claude']);
-
-      // Check provider availability
-      const results = await this.router.healthCheckAll();
-      const healthyCount = Object.values(results).filter(r => r.status === 'healthy').length;
+      // Always initialize Ollama/Mistral first (primary provider)
+      await this.initializeOllama(options);
       
-      console.log(`✅ ${healthyCount} provider(s) initialized successfully`);
-      return results;
+      // Initialize optional providers silently
+      await this.initializeOptionalProviders(options);
+      
+      // Set fallback order prioritizing cost efficiency
+      this.router.setFallbackOrder(['ollama', 'gemini', 'claude']);
+      
+      this.initialized = true;
+      return this.getProviderStatus();
 
     } catch (error) {
       console.error('❌ Provider initialization failed:', this.sanitizeError(error.message));
       throw error;
     }
+  }
+
+  /**
+   * Initialize Ollama/Mistral (primary provider)
+   */
+  async initializeOllama(options = {}) {
+    try {
+      const ollamaProvider = new OllamaProvider({
+        host: options.ollamaHost || this.config.providers?.ollama?.host
+      });
+      ollamaProvider.priority = 1;
+      this.router.registerProvider(ollamaProvider);
+      
+      // Test availability
+      const isAvailable = await ollamaProvider.isAvailable();
+      this.providerStatus.ollama = {
+        available: isAvailable,
+        status: isAvailable ? 'healthy' : 'unavailable',
+        priority: 1,
+        type: 'local',
+        cost: 'free'
+      };
+      
+      if (isAvailable) {
+        console.log('✅ Mistral (Ollama) ready - primary provider active');
+      } else {
+        console.warn('⚠️  Mistral (Ollama) unavailable - fallback providers will be used');
+      }
+    } catch (error) {
+      this.providerStatus.ollama.status = 'error';
+      console.warn('⚠️  Ollama initialization failed:', this.sanitizeError(error.message));
+    }
+  }
+
+  /**
+   * Initialize optional providers (Gemini, Claude)
+   */
+  async initializeOptionalProviders(options = {}) {
+    // Initialize Claude quietly
+    if (process.env.ANTHROPIC_API_KEY || this.config.providers?.claude?.apiKey) {
+      try {
+        const claudeProvider = new ClaudeProvider({
+          apiKey: process.env.ANTHROPIC_API_KEY || this.config.providers?.claude?.apiKey
+        });
+        claudeProvider.priority = 3;
+        this.router.registerProvider(claudeProvider);
+        
+        const isAvailable = await claudeProvider.isAvailable();
+        this.providerStatus.claude = {
+          available: isAvailable,
+          status: isAvailable ? 'healthy' : 'unavailable',
+          priority: 3,
+          type: 'cloud',
+          cost: 'paid'
+        };
+      } catch (error) {
+        this.providerStatus.claude.status = 'error';
+      }
+    }
+
+    // Initialize Gemini quietly  
+    if (process.env.GEMINI_API_KEY || this.config.providers?.gemini?.apiKey) {
+      try {
+        const geminiProvider = new GeminiProvider({
+          apiKey: process.env.GEMINI_API_KEY || this.config.providers?.gemini?.apiKey
+        });
+        geminiProvider.priority = 2;
+        this.router.registerProvider(geminiProvider);
+        
+        const isAvailable = await geminiProvider.isAvailable();
+        this.providerStatus.gemini = {
+          available: isAvailable,
+          status: isAvailable ? 'healthy' : 'unavailable',
+          priority: 2,
+          type: 'cloud',
+          cost: 'paid'
+        };
+      } catch (error) {
+        this.providerStatus.gemini.status = 'error';
+      }
+    }
+  }
+
+  /**
+   * Get visual status of all providers
+   */
+  getProviderStatus() {
+    return {
+      ...this.providerStatus,
+      summary: {
+        total: Object.keys(this.providerStatus).length,
+        available: Object.values(this.providerStatus).filter(p => p.available).length,
+        primary: this.providerStatus.ollama.available ? 'mistral' : 'fallback'
+      }
+    };
+  }
+
+  /**
+   * Display visual status of all providers
+   */
+  displayProviderStatus() {
+    console.log('\n📊 Provider Status:');
+    
+    for (const [name, status] of Object.entries(this.providerStatus)) {
+      const icon = status.available ? '✅' : (status.status === 'error' ? '❌' : '⚠️');
+      const costBadge = status.cost === 'free' ? '🆓' : '💰';
+      const typeBadge = status.type === 'local' ? '🏠' : '☁️';
+      
+      console.log(`${icon} ${name.toUpperCase().padEnd(8)} ${typeBadge} ${costBadge} Priority: ${status.priority} - ${status.status}`);
+    }
+    
+    const summary = this.getProviderStatus().summary;
+    console.log(`\n📈 Summary: ${summary.available}/${summary.total} providers available`);
+    console.log(`🎯 Primary: ${summary.primary === 'mistral' ? 'Mistral (cost-optimized)' : 'Fallback providers'}\n`);
+  }
+
+  /**
+   * Mistral-first decision logic for task handling
+   */
+  async shouldUseMistral(message, options = {}) {
+    if (!this.providerStatus.ollama.available) {
+      return { useMistral: false, reason: 'Mistral unavailable' };
+    }
+
+    const taskType = options.taskType || 'balanced';
+    const messageLength = message.length;
+    const complexity = this.assessComplexity(message, options);
+
+    // Always try Mistral first unless explicitly complex
+    if (complexity < 0.8 && messageLength < 8000) {
+      return { useMistral: true, reason: 'Standard task - Mistral can handle' };
+    }
+
+    if (taskType === 'complex' && complexity > 0.8) {
+      return { useMistral: false, reason: 'High complexity - using specialized provider' };
+    }
+
+    // For large projects, assess if splitting is needed
+    if (messageLength > 8000 || options.splitWorkload) {
+      return { useMistral: true, reason: 'Large task - will split workload if needed', split: true };
+    }
+
+    return { useMistral: true, reason: 'Default to cost-efficient Mistral' };
+  }
+
+  /**
+   * Assess complexity of the task
+   */
+  assessComplexity(message, options = {}) {
+    let complexity = 0.3; // Base complexity
+
+    // Technical indicators
+    if (/\b(algorithm|architecture|design pattern|optimization|performance|security|database|api|framework)\b/i.test(message)) {
+      complexity += 0.2;
+    }
+
+    // Length factor
+    if (message.length > 5000) complexity += 0.2;
+    if (message.length > 10000) complexity += 0.3;
+
+    // Task type factor
+    const complexTasks = ['complex', 'analysis', 'code'];
+    if (complexTasks.includes(options.taskType)) {
+      complexity += 0.3;
+    }
+
+    // Multi-part indicators
+    if (/\b(step by step|analyze|compare|evaluate|research|comprehensive|detailed)\b/i.test(message)) {
+      complexity += 0.2;
+    }
+
+    return Math.min(complexity, 1.0);
   }
 
   /**
@@ -86,9 +232,14 @@ export class MultiAI {
   }
 
   /**
-   * Enhanced chat with smart provider routing and validation
+   * Enhanced chat with Mistral-first decision logic
    */
   async chat(message, options = {}) {
+    // Ensure providers are initialized
+    if (!this.initialized) {
+      await this.initializeProviders(options);
+    }
+
     // Input validation
     if (!message || typeof message !== 'string') {
       throw new Error('Message must be a non-empty string');
@@ -99,10 +250,18 @@ export class MultiAI {
     }
 
     try {
+      // Mistral-first decision logic
+      const decision = await this.shouldUseMistral(message, options);
+      console.log(`🤖 Decision: ${decision.reason}`);
+
+      if (decision.split) {
+        return await this.handleLargeTask(message, options);
+      }
+
       const result = await this.router.executeRequest(message, {
         taskType: options.taskType || 'balanced',
         stream: options.stream || false,
-        preferLocal: options.preferLocal ?? this.config.routing?.preferLocal,
+        preferLocal: decision.useMistral,
         maxCost: options.maxCost || this.config.routing?.maxCost,
         timeout: options.timeout || 30000
       });
@@ -113,12 +272,40 @@ export class MultiAI {
       return {
         ...result,
         contextLength: this.context.length,
+        decision: decision,
         sanitized: true
       };
 
     } catch (error) {
       console.error('💬 Chat error:', this.sanitizeError(error.message));
       throw new Error(`Multi-AI chat failed: ${this.sanitizeError(error.message)}`);
+    }
+  }
+
+  /**
+   * Handle large tasks with potential workload splitting
+   */
+  async handleLargeTask(message, options = {}) {
+    console.log('📊 Analyzing large task for potential splitting...');
+    
+    // For now, try with Mistral first, then fallback
+    try {
+      const result = await this.router.executeRequest(message, {
+        ...options,
+        preferLocal: true,
+        taskType: options.taskType || 'balanced'
+      });
+      
+      console.log('✅ Mistral handled large task successfully');
+      return result;
+    } catch (error) {
+      console.log('🔄 Large task failed on Mistral, using specialized provider...');
+      
+      return await this.router.executeRequest(message, {
+        ...options,
+        preferLocal: false,
+        taskType: 'complex'
+      });
     }
   }
 
@@ -248,16 +435,21 @@ Please provide insights about:
    * Get comprehensive system status
    */
   async getSystemStatus() {
+    // Ensure providers are initialized
+    if (!this.initialized) {
+      await this.initializeProviders();
+    }
+
     const healthChecks = await this.router.healthCheckAll();
     const providerStats = this.router.getProviderStats();
     const requestHistory = this.router.getRequestHistory(5);
+    const providerStatus = this.getProviderStatus();
     
     return {
       timestamp: new Date().toISOString(),
-      version: '2.0.0',
+      version: '2.1.0',
       providers: {
-        total: Object.keys(healthChecks).length,
-        healthy: Object.values(healthChecks).filter(h => h.status === 'healthy').length,
+        ...providerStatus,
         details: healthChecks
       },
       performance: {
@@ -273,6 +465,10 @@ Please provide insights about:
           length: this.context.length,
           maxLength: this.config.context?.maxLength || 20
         }
+      },
+      decision: {
+        primaryProvider: providerStatus.summary.primary,
+        costOptimized: this.config.routing?.costOptimization || true
       }
     };
   }

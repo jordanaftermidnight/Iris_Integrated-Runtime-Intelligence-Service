@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 
 // Optional import - gracefully handle missing dependency
-let Anthropic;
+let Anthropic = null;
+let importError = null;
+
 try {
   const module = await import('@anthropic-ai/sdk');
   Anthropic = module.default;
 } catch (error) {
-  console.warn('⚠️  Claude provider unavailable: @anthropic-ai/sdk package not installed');
-  Anthropic = null;
+  importError = error;
+  // Don't log here - will be handled in constructor
 }
 
 /**
