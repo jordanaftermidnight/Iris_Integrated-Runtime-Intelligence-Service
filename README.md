@@ -214,21 +214,37 @@ cp config/llama2-config.example.json config/llama2-config.json
 
 ---
 
-## 🚀 **Why Choose Iris?**
+## 🔍 **How Iris Compares**
 
-### **🆚 vs Traditional IDE Extensions**
-- ✅ **Multi-provider AI** vs single provider
-- ✅ **85%+ cache hit rate** vs no caching
-- ✅ **Works everywhere** vs editor-specific
-- ✅ **Local processing** vs cloud-only
-- ✅ **Cost optimized** vs expensive API usage
+### **🆚 Comprehensive Tool Comparison**
 
-### **🆚 vs Other AI Tools**
-- ✅ **Intelligent routing** vs manual provider selection
-- ✅ **Project-wide context** vs single file awareness
-- ✅ **Professional features** vs basic chat
-- ✅ **Performance optimization** vs no caching
-- ✅ **Privacy options** vs cloud-dependent
+| Feature | **Iris** | Ollama | LM Studio | ChatGPT | Perplexity | GitHub Copilot |
+|---------|----------|--------|-----------|---------|------------|----------------|
+| **Multi-AI Providers** | ✅ 5 providers | ❌ Local only | ❌ Local only | ❌ OpenAI only | ❌ Web search | ❌ GitHub only |
+| **Intelligent Caching** | ✅ 85%+ hit rate | ❌ None | ❌ None | ❌ None | ❌ None | ❌ None |
+| **Local + Cloud** | ✅ Best of both | ✅ Local only | ✅ Local only | ❌ Cloud only | ❌ Cloud only | ❌ Cloud only |
+| **IDE Integration** | ✅ Universal CLI | ❌ None | ❌ None | ❌ Web only | ❌ Web only | ✅ VS Code only |
+| **Code Completion** | ✅ Context-aware | ❌ Manual | ❌ Manual | ❌ None | ❌ None | ✅ Limited |
+| **Project Analysis** | ✅ Workspace-wide | ❌ None | ❌ None | ❌ None | ❌ None | ❌ File-level |
+| **Cost Optimization** | ✅ Smart routing | ✅ Free | ✅ Free | ❌ Expensive | ❌ Subscription | ❌ Subscription |
+| **Commercial License** | ✅ Enterprise ready | ❌ None | ❌ None | ❌ Per-user | ❌ Per-user | ❌ Per-seat |
+| **Privacy Control** | ✅ Local options | ✅ Fully local | ✅ Fully local | ❌ Cloud only | ❌ Cloud only | ❌ Cloud only |
+
+### **🎯 Key Differentiators**
+
+**vs Ollama/LM Studio**: Iris uses them as providers but adds intelligent orchestration, caching, and professional IDE features.
+
+**vs ChatGPT/Perplexity**: Iris provides development-focused tools with multi-provider intelligence and local processing options.
+
+**vs GitHub Copilot**: Iris works everywhere (not just VS Code) with multiple AI providers and enterprise-grade features.
+
+### **💡 Unique Value Proposition**
+Iris is the **only tool** that combines:
+- Multi-provider AI intelligence
+- Professional development features  
+- Universal editor compatibility
+- Enterprise-grade caching and optimization
+- Local privacy with cloud capabilities
 
 ---
 
@@ -257,7 +273,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## 📜 **License**
 
-MIT License - see [LICENSE](LICENSE) file for details.
+**Dual License**: Personal use free, Commercial use licensed - see [LICENSE](LICENSE) file for details.
+
+- **Personal Use**: Free for individual, non-commercial use
+- **Commercial Use**: Requires paid license ($299-$2,999/year based on company size)  
+- **Enterprise Features**: Source code access, custom development, SLA support
 
 ---
 
