@@ -62,6 +62,8 @@ This license does not grant rights to:
 - Modify, adapt, or create derivative works
 - Reverse engineer, decompile, or disassemble the Software
 - Distribute, sublicense, or transfer the Software
+- Circumvent, disable, or modify security or licensing mechanisms
+- Use the Software for illegal, unethical, or harmful purposes
 
 ================================================================================
 3. COMMERCIAL LICENSING TERMS
@@ -231,9 +233,11 @@ fees and costs.
 9. COMPLIANCE AND ENFORCEMENT
 ================================================================================
 
-9.1 AUDIT RIGHTS
+9.1 AUDIT RIGHTS AND TECHNICAL ENFORCEMENT
 Licensor reserves the right to audit Licensee's use of the Software to ensure 
-compliance with this Agreement, with reasonable notice.
+compliance with this Agreement, with reasonable notice. The Software includes 
+automated compliance monitoring and enforcement mechanisms that may restrict 
+functionality for violations of this Agreement.
 
 9.2 TERMINATION
 This Agreement terminates immediately upon breach. Upon termination, Licensee 

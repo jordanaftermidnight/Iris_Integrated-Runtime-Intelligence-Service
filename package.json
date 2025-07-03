@@ -1,7 +1,7 @@
 {
   "name": "iris-ai",
   "version": "2.4.0",
-  "description": "Iris - Integrated Runtime Intelligence Service with smart provider selection, supporting Ollama, Gemini, and Claude",
+  "description": "Iris - Integrated Runtime Intelligence Service with smart provider selection, supporting Ollama, Gemini, OpenAI, Groq, and Anthropic",
   "main": "src/enhanced-ai.js",
   "type": "module",
   "bin": {
@@ -28,7 +28,6 @@
     "llm",
     "ollama",
     "gemini",
-    "claude",
     "anthropic",
     "cli",
     "multi-provider",

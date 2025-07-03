@@ -12,6 +12,10 @@ import { GroqProvider } from './providers/groq-provider.js';
 /**
  * Iris - Integrated Runtime Intelligence Service
  * Main entry point for programmatic usage
+ * 
+ * @author Jordan After Midnight (concept and architecture)
+ * @author Claude AI (implementation assistance)
+ * @copyright 2025 Jordan After Midnight. All rights reserved.
  */
 export class MultiAI {
   constructor(options = {}) {

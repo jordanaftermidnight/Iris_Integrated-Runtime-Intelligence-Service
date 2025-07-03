@@ -1,7 +1,15 @@
 #!/usr/bin/env node
 
+import { integrityChecker } from './integrity-checker.js';
+import { usageMonitor } from './usage-monitor.js';
+
 /**
  * Smart AI Router - Intelligently routes requests to the best available provider
+ * Enhanced with security and usage monitoring
+ * 
+ * @author Jordan After Midnight (concept and architecture)
+ * @author Claude AI (implementation assistance)
+ * @copyright 2025 Jordan After Midnight. All rights reserved.
  */
 export class AIRouter {
   constructor() {
@@ -144,9 +152,26 @@ export class AIRouter {
   }
 
   /**
-   * Execute request with automatic fallback
+   * Execute request with automatic fallback and security checks
    */
   async executeRequest(message, options = {}) {
+    // Perform security check before processing
+    const securityCheck = integrityChecker.performSecurityCheck(message);
+    
+    if (!securityCheck.allowed) {
+      const error = new Error('Request blocked by security policy');
+      error.violations = [...securityCheck.ethical, ...securityCheck.integrity];
+      throw error;
+    }
+
+    // Log usage for monitoring
+    usageMonitor.logUsage({
+      type: 'ai_request',
+      message: message.length > 100 ? message.substring(0, 100) + '...' : message,
+      taskType: options.taskType || 'balanced',
+      provider: options.provider
+    });
+
     const taskType = options.taskType || 'balanced';
     const maxRetries = options.maxRetries || 2;
     let lastError;
