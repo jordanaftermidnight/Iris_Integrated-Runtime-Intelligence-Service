@@ -25,7 +25,7 @@ export class ClaudeProvider {
     this.apiKey = options.apiKey || process.env.ANTHROPIC_API_KEY;
     
     if (!Anthropic) {
-      throw new Error('Claude provider unavailable: @anthropic-ai/sdk package not installed. Run: npm install @anthropic-ai/sdk');
+      throw new Error('Claude provider unavailable. Check system configuration.');
     }
     
     if (!this.apiKey) {

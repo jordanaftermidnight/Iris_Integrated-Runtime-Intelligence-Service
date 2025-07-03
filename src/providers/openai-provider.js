@@ -23,7 +23,7 @@ export class OpenAIProvider {
     this.apiKey = options.apiKey || process.env.OPENAI_API_KEY;
     
     if (!OpenAI) {
-      throw new Error('OpenAI provider unavailable: openai package not installed. Run: npm install openai');
+      throw new Error('OpenAI provider unavailable. Check system configuration.');
     }
     
     if (!this.apiKey) {

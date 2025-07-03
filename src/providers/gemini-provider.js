@@ -21,7 +21,7 @@ export class GeminiProvider {
     this.apiKey = options.apiKey || process.env.GEMINI_API_KEY;
     
     if (!GoogleGenerativeAI) {
-      throw new Error('Gemini provider unavailable: @google/generative-ai package not installed. Run: npm install @google/generative-ai');
+      throw new Error('Gemini provider unavailable. Check system configuration.');
     }
     
     if (!this.apiKey) {

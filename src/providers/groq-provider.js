@@ -23,7 +23,7 @@ export class GroqProvider {
     this.apiKey = options.apiKey || process.env.GROQ_API_KEY;
     
     if (!Groq) {
-      throw new Error('Groq provider unavailable: groq-sdk package not installed. Run: npm install groq-sdk');
+      throw new Error('Groq provider unavailable. Check system configuration.');
     }
     
     if (!this.apiKey) {

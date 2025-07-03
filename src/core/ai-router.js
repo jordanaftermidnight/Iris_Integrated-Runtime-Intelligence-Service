@@ -60,7 +60,7 @@ export class AIRouter {
           });
         }
       } catch (error) {
-        console.warn(`Provider ${name} availability check failed:`, error.message);
+        // Provider availability check failed - silent fallback
       }
     }
 
@@ -181,7 +181,7 @@ export class AIRouter {
         const provider = await this.selectProvider(taskType, options);
         const startTime = Date.now();
         
-        console.log(`🤖 Using ${provider.name} for ${taskType} task (attempt ${attempt + 1})`);
+        // Provider selected for task execution
 
         let result;
         if (options.stream) {
@@ -209,10 +209,10 @@ export class AIRouter {
 
       } catch (error) {
         lastError = error;
-        console.warn(`❌ Provider failed (attempt ${attempt + 1}):`, error.message);
+        // Provider failed - attempting fallback
         
         if (error.message.includes('quota') || error.message.includes('rate limit')) {
-          console.log('🔄 Rate limit hit, trying next provider...');
+          // Rate limit reached - trying alternative provider
           continue;
         }
         

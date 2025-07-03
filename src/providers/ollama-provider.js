@@ -6,7 +6,7 @@ try {
   const ollamaModule = await import('ollama');
   Ollama = ollamaModule.Ollama;
 } catch (error) {
-  console.warn('Ollama dependency not found. Install with: npm install ollama');
+  console.warn('Local AI provider not available. Check installation.');
 }
 
 /**
@@ -75,7 +75,7 @@ export class OllamaProvider {
 
   async chat(message, options = {}) {
     if (!this.available || !this.ollama) {
-      throw new Error('Ollama provider not available. Install with: npm install ollama');
+      throw new Error('Local AI provider not available. Check system configuration.');
     }
 
     const taskType = options.taskType || 'balanced';

@@ -84,7 +84,7 @@ QIDAQAB
    * Check usage limits for personal license
    */
   checkUsageLimits() {
-    const usageFile = path.join(process.cwd(), '.iris-usage');
+    const usageFile = path.join(process.cwd(), '.usage-data');
     
     try {
       let usage = { requests: 0, lastReset: Date.now() };
@@ -121,7 +121,7 @@ QIDAQAB
       };
 
     } catch (error) {
-      console.warn('Could not track usage limits:', error.message);
+      // Usage tracking unavailable - continuing with reduced functionality
       return { exceeded: false, current: 0, limit: this.maxPersonalRequests };
     }
   }
@@ -183,8 +183,8 @@ QIDAQAB
    * Comprehensive license check
    */
   performLicenseCheck() {
-    const licenseKey = process.env.IRIS_LICENSE_KEY || 
-                      process.env.IRIS_COMMERCIAL_LICENSE ||
+    const licenseKey = process.env.LICENSE_KEY || 
+                      process.env.COMMERCIAL_LICENSE ||
                       this.readLicenseFile();
 
     const assessment = this.assessLicenseRequirement();
@@ -245,9 +245,9 @@ QIDAQAB
    */
   readLicenseFile() {
     const licenseFiles = [
-      '.iris-license',
-      'iris-commercial.key',
-      '.iris-commercial'
+      '.license',
+      'commercial.key',
+      '.commercial'
     ];
 
     for (const filename of licenseFiles) {

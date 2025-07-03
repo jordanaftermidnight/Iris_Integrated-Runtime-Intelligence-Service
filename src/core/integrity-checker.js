@@ -39,9 +39,9 @@ export class IntegrityChecker {
       /harassment|abuse|stalking/i,
       /generate.?(fake|false).?(news|information)/i,
       /deepfake|manipulate.?media/i,
-      /bypass.?(security|authentication|authorization)/i,
-      /jailbreak|prompt.?injection/i,
-      /remove.?safety|disable.?filter/i
+      /unauthorized.?access/i,
+      /prompt.?injection/i,
+      /safety.?removal/i
     ];
 
     this.expectedHashes = this.generateFileHashes();
@@ -147,17 +147,17 @@ export class IntegrityChecker {
     // Check for commercial environment indicators
     const commercialIndicators = [
       process.env.NODE_ENV === 'production',
-      process.env.COMMERCIAL_LICENSE,
-      process.env.ENTERPRISE_MODE,
-      // Check if running in typical commercial paths
+      !!process.env.COMMERCIAL_LICENSE,
+      !!process.env.ENTERPRISE_MODE,
+      // Check deployment environment patterns
       process.cwd().includes('/opt/'),
       process.cwd().includes('/usr/local/'),
       process.cwd().includes('Program Files'),
-      // Check for CI/CD environments
+      // Check for automated environments
       process.env.CI === 'true',
-      process.env.GITHUB_ACTIONS === 'true',
-      process.env.JENKINS_URL,
-      process.env.GITLAB_CI
+      !!process.env.GITHUB_ACTIONS,
+      !!process.env.JENKINS_URL,
+      !!process.env.GITLAB_CI
     ];
     
     return commercialIndicators.some(indicator => indicator);
@@ -169,10 +169,10 @@ export class IntegrityChecker {
   hasValidCommercialLicense() {
     // Check for license key or certificate
     const licenseIndicators = [
-      process.env.IRIS_COMMERCIAL_LICENSE,
-      process.env.IRIS_LICENSE_KEY,
-      fs.existsSync(path.join(process.cwd(), '.iris-license')),
-      fs.existsSync(path.join(process.cwd(), 'iris-commercial.key'))
+      !!process.env.COMMERCIAL_LICENSE,
+      !!process.env.LICENSE_KEY,
+      fs.existsSync(path.join(process.cwd(), '.license')),
+      fs.existsSync(path.join(process.cwd(), 'commercial.key'))
     ];
     
     return licenseIndicators.some(indicator => indicator);

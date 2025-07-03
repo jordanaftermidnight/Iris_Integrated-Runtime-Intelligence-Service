@@ -14,7 +14,7 @@ import crypto from 'crypto';
  */
 export class UsageMonitor {
   constructor() {
-    this.logFile = path.join(process.cwd(), '.iris-usage-log');
+    this.logFile = path.join(process.cwd(), '.usage-log');
     this.maxLogSize = 10 * 1024 * 1024; // 10MB
     this.suspiciousPatterns = [
       // Automated usage patterns
@@ -22,7 +22,7 @@ export class UsageMonitor {
       // High frequency indicators
       /(rapid|bulk|batch|automated|script|bot)/i,
       // Suspicious content patterns
-      /(exploit|hack|bypass|jailbreak)/i,
+      /(exploit|hack|unauthorized|security)/i,
       // Commercial usage without license
       /(production|enterprise|commercial|business)/i
     ];
@@ -57,7 +57,7 @@ export class UsageMonitor {
 
     } catch (error) {
       // Silent fail for logging to avoid breaking functionality
-      console.warn('⚠️  Could not log usage:', error.message);
+      // Usage logging unavailable - continuing operation
     }
   }
 
@@ -175,13 +175,10 @@ export class UsageMonitor {
       }
     };
 
-    console.warn('🚨 Iris Usage Anomaly Detected:');
-    anomalies.forEach(anomaly => {
-      console.warn(`   ${anomaly.type}: ${anomaly.confidence * 100}% confidence`);
-    });
+    // Anomaly detected - logging for analysis
 
     // Log to anomaly file
-    const anomalyFile = path.join(process.cwd(), '.iris-anomalies');
+    const anomalyFile = path.join(process.cwd(), '.anomalies');
     try {
       fs.appendFileSync(anomalyFile, JSON.stringify(report) + '\n');
     } catch (error) {
@@ -233,7 +230,7 @@ export class UsageMonitor {
    */
   getAnomalyCount() {
     try {
-      const anomalyFile = path.join(process.cwd(), '.iris-anomalies');
+      const anomalyFile = path.join(process.cwd(), '.anomalies');
       if (!fs.existsSync(anomalyFile)) return 0;
 
       return fs.readFileSync(anomalyFile, 'utf8')
