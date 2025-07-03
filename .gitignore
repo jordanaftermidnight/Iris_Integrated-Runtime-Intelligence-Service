@@ -1,0 +1,82 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment files
+.env
+.env.local
+.env.production
+*.key
+
+# Configuration files (user-specific)
+*-config.json
+!*-config.example.json
+
+# Cache and temporary files
+cache.db
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Test files and coverage
+coverage/
+.nyc_output/
+.coverage
+htmlcov/
+
+# Build outputs
+dist/
+build/
+*.tgz
+
+# Runtime files
+*.pid
+*.seed
+*.log
+
+# Local development files
+*.local
+*.dev
+
+# Security - API Keys and Sensitive Data
+setup-env.sh
+api-keys.txt
+secrets.json
+**/api-keys/**
+**/secrets/**
+*.pem
+*.key
+*.crt
+*.p12
+
+# Sensitive configuration files
+config/production-*
+config/*-prod.json
+config/secrets.json

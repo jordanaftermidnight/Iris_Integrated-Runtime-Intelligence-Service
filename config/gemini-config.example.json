@@ -1,0 +1,18 @@
+{
+  "apiKey": "your-gemini-api-key-here",
+  "defaultModel": "gemini-1.5-pro",
+  "models": {
+    "gemini-1.5-pro": {
+      "maxTokens": 8192,
+      "temperature": 0.7,
+      "topP": 0.9
+    },
+    "gemini-1.5-flash": {
+      "maxTokens": 4096,
+      "temperature": 0.5,
+      "topP": 0.8
+    }
+  },
+  "timeout": 30000,
+  "retries": 3
+}

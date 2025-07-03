@@ -1,0 +1,318 @@
+COMPREHENSIVE SOFTWARE LICENSE AGREEMENT
+IRIS - Integrated Runtime Intelligence Service
+
+Copyright (c) 2025 Jordan After Midnight. All rights reserved.
+
+================================================================================
+IMPORTANT LEGAL NOTICE
+================================================================================
+
+This Software License Agreement ("Agreement") is a legal contract between you 
+("Licensee") and Jordan After Midnight ("Licensor") regarding the use of the 
+Iris software and related intellectual property. By installing, copying, or 
+using this Software, you agree to be bound by all terms of this Agreement.
+
+READ THIS AGREEMENT CAREFULLY BEFORE USING THE SOFTWARE.
+
+================================================================================
+1. DEFINITIONS
+================================================================================
+
+1.1 "Agreement" means this Software License Agreement and all amendments.
+
+1.2 "Software" means the Iris - Integrated Runtime Intelligence Service, 
+    including all source code, object code, documentation, algorithms, 
+    interfaces, designs, architectures, and related materials.
+
+1.3 "Licensor" means Jordan After Midnight, a legal entity.
+
+1.4 "Licensee" or "You" means the individual or legal entity exercising 
+    rights under this Agreement.
+
+1.5 "Commercial Use" means any use of the Software for business purposes, 
+    including but not limited to: revenue generation, business operations, 
+    commercial services, enterprise applications, or integration into 
+    commercial products.
+
+1.6 "Personal Use" means use by an individual for non-commercial, personal 
+    purposes only, excluding any business or commercial activity.
+
+1.7 "Confidential Information" means all proprietary algorithms, trade secrets, 
+    source code, technical specifications, and business information related 
+    to the Software.
+
+================================================================================
+2. GRANT OF LICENSE
+================================================================================
+
+2.1 PERSONAL USE LICENSE
+Subject to compliance with this Agreement, Licensor grants Licensee a limited, 
+non-exclusive, non-transferable, revocable license to use the Software for 
+Personal Use only, at no charge.
+
+2.2 COMMERCIAL USE LICENSE
+Commercial Use requires a separate Commercial License Agreement and payment 
+of applicable fees. Commercial Use without proper licensing constitutes 
+copyright infringement and breach of contract.
+
+2.3 SCOPE LIMITATIONS
+This license does not grant rights to:
+- Use Licensor's trademarks, trade names, or service marks
+- Access source code (except as explicitly provided)
+- Modify, adapt, or create derivative works
+- Reverse engineer, decompile, or disassemble the Software
+- Distribute, sublicense, or transfer the Software
+- Circumvent, disable, or modify security or licensing mechanisms
+- Use the Software for illegal, unethical, or harmful purposes
+
+================================================================================
+3. COMMERCIAL LICENSING TERMS
+================================================================================
+
+3.1 LICENSING TIERS
+- Personal License: FREE (Personal Use only)
+- Commercial License: Contact for pricing based on organization size and usage
+- Enterprise License: Custom pricing with additional features and support
+
+3.2 COMMERCIAL LICENSE INCLUDES
+- Unlimited commercial usage rights
+- Priority technical support
+- Commercial use indemnification
+- Service level agreements
+- Custom feature development (Enterprise)
+- Source code access (Enterprise)
+- Redistribution rights (Enterprise with additional fees)
+
+3.3 LICENSING PROCESS
+To obtain commercial licensing, contact:
+Email: jordanaftermidnight@users.noreply.github.com
+Subject: Commercial License Request - Iris Software
+
+================================================================================
+4. INTELLECTUAL PROPERTY RIGHTS
+================================================================================
+
+4.1 COPYRIGHT OWNERSHIP
+The Software is protected by copyright laws and international copyright 
+treaties. Licensor owns all rights, title, and interest in and to the Software, 
+including all intellectual property rights therein.
+
+4.2 PATENT RIGHTS
+The Software may be protected by patents and patent applications. Users are 
+granted rights only as specified in this license agreement.
+
+4.3 TRADE SECRETS
+The Software contains valuable trade secrets and proprietary information, 
+including but not limited to:
+- Proprietary AI routing algorithms
+- Performance optimization techniques
+- Caching strategies and implementations
+- Provider selection methodologies
+
+4.4 PATENT INFRINGEMENT PROTECTION
+Licensor will defend commercial licensees against patent infringement claims 
+related to the Software's core functionality, subject to commercial license 
+terms and conditions.
+
+================================================================================
+5. DATA PROTECTION AND PRIVACY
+================================================================================
+
+5.1 DATA PROCESSING PRINCIPLES
+The Software is designed with privacy-by-design principles:
+- Local processing capabilities (Ollama integration)
+- Minimal data transmission to third-party providers
+- User control over data sharing preferences
+- No unauthorized data collection or storage
+
+5.2 COMPLIANCE WITH PRIVACY LAWS
+This Software complies with applicable data protection regulations:
+- General Data Protection Regulation (GDPR) - EU
+- California Consumer Privacy Act (CCPA) - California, USA
+- Personal Information Protection and Electronic Documents Act (PIPEDA) - Canada
+- Other applicable regional privacy laws
+
+5.3 DATA HANDLING PRACTICES
+- User queries may be transmitted to selected AI providers based on user configuration
+- Local processing options available to minimize external data transmission
+- No persistent storage of user queries without explicit consent
+- Encryption in transit for all external communications
+- User data is not used for training or improving third-party AI models without consent
+
+5.4 USER DATA RIGHTS
+Users have the right to:
+- Control which AI providers receive their data
+- Use local processing options for sensitive data
+- Request data deletion from cache and logs
+- Access information about data processing activities
+- Withdraw consent for data processing
+
+5.5 SECURITY MEASURES
+The Software implements industry-standard security measures:
+- Encrypted communications with AI providers
+- Secure credential storage
+- Regular security updates and patches
+- Vulnerability disclosure program
+
+================================================================================
+6. WARRANTIES AND DISCLAIMERS
+================================================================================
+
+6.1 LIMITED WARRANTY (COMMERCIAL LICENSES ONLY)
+For commercial licenses, Licensor warrants that the Software will perform 
+substantially in accordance with documentation for ninety (90) days from 
+delivery. Licensor's sole obligation is to provide updates or refunds.
+
+6.2 DISCLAIMER FOR PERSONAL USE
+FOR PERSONAL USE, THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY 
+KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF 
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+6.3 AI PROVIDER DISCLAIMER
+The Software integrates with third-party AI providers. Licensor makes no 
+warranties regarding the accuracy, reliability, or availability of 
+third-party AI services.
+
+================================================================================
+7. LIMITATION OF LIABILITY
+================================================================================
+
+7.1 LIABILITY LIMITATIONS
+EXCEPT AS REQUIRED BY APPLICABLE LAW, IN NO EVENT SHALL LICENSOR BE LIABLE 
+FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, 
+INCLUDING LOSS OF PROFITS, DATA, OR BUSINESS INTERRUPTION.
+
+7.2 LIABILITY CAP
+LICENSOR'S TOTAL LIABILITY UNDER THIS AGREEMENT SHALL NOT EXCEED THE AMOUNT 
+PAID BY LICENSEE FOR THE SOFTWARE IN THE TWELVE (12) MONTHS PRECEDING THE 
+CLAIM.
+
+7.3 COMMERCIAL INDEMNIFICATION
+Commercial licensees receive limited indemnification against third-party 
+intellectual property claims related to the Software's proper use.
+
+================================================================================
+8. DISPUTE RESOLUTION
+================================================================================
+
+8.1 GOVERNING LAW
+This Agreement shall be governed by and construed in accordance with the 
+laws of the State of Delaware, United States, without regard to conflict 
+of law principles.
+
+8.2 JURISDICTION
+Any disputes arising under this Agreement shall be subject to the exclusive 
+jurisdiction of the state and federal courts located in New Castle County, 
+Delaware, United States.
+
+8.3 DISPUTE RESOLUTION PROCEDURE
+8.3.1 NEGOTIATION: Parties shall first attempt to resolve disputes through 
+      good faith negotiation for thirty (30) days.
+
+8.3.2 MEDIATION: If negotiation fails, disputes shall be submitted to binding 
+      mediation under the Commercial Mediation Procedures of the American 
+      Arbitration Association (AAA).
+
+8.3.3 ARBITRATION: If mediation fails, disputes shall be resolved through 
+      binding arbitration under AAA Commercial Arbitration Rules, with one 
+      arbitrator selected by mutual agreement.
+
+8.3.4 COURT PROCEEDINGS: Only after exhausting alternative dispute resolution 
+      may parties pursue court proceedings in the designated jurisdiction.
+
+8.4 INJUNCTIVE RELIEF
+Notwithstanding the above, Licensor may seek immediate injunctive relief in 
+any court of competent jurisdiction to protect intellectual property rights 
+or prevent unauthorized use of the Software.
+
+8.5 ATTORNEY'S FEES
+The prevailing party in any dispute shall be entitled to reasonable attorney's 
+fees and costs.
+
+================================================================================
+9. COMPLIANCE AND ENFORCEMENT
+================================================================================
+
+9.1 AUDIT RIGHTS AND TECHNICAL ENFORCEMENT
+Licensor reserves the right to audit Licensee's use of the Software to ensure 
+compliance with this Agreement, with reasonable notice. The Software includes 
+automated compliance monitoring and enforcement mechanisms that may restrict 
+functionality for violations of this Agreement.
+
+9.2 TERMINATION
+This Agreement terminates immediately upon breach. Upon termination, Licensee 
+must cease all use and destroy all copies of the Software.
+
+9.3 ENFORCEMENT
+Violations of this Agreement may result in:
+- Immediate license termination
+- Legal action for damages and injunctive relief
+- Criminal prosecution for copyright infringement
+- Patent infringement claims
+
+================================================================================
+10. GENERAL PROVISIONS
+================================================================================
+
+10.1 ENTIRE AGREEMENT
+This Agreement constitutes the entire agreement between the parties and 
+supersedes all prior or contemporaneous agreements or understandings.
+
+10.2 AMENDMENTS
+This Agreement may only be amended by written agreement signed by both parties.
+
+10.3 SEVERABILITY
+If any provision is found unenforceable, the remainder of the Agreement 
+shall remain in full force and effect.
+
+10.4 FORCE MAJEURE
+Neither party shall be liable for delays or failures due to circumstances 
+beyond their reasonable control.
+
+10.5 EXPORT COMPLIANCE
+The Software may be subject to export control laws. Licensee agrees to 
+comply with all applicable export and import regulations.
+
+================================================================================
+11. CONTACT INFORMATION AND LEGAL NOTICES
+================================================================================
+
+11.1 LICENSOR CONTACT
+Jordan After Midnight
+Email: jordanaftermidnight@users.noreply.github.com
+Legal Department: legal@jordanaftermidnight.com [To be established]
+
+11.2 LEGAL NOTICES
+All legal notices must be sent via certified mail to the address provided 
+upon request for commercial licensing.
+
+11.3 LICENSING INQUIRIES
+For commercial licensing: licensing@jordanaftermidnight.com [To be established]
+For technical support: support@jordanaftermidnight.com [To be established]
+
+================================================================================
+ACKNOWLEDGMENT
+================================================================================
+
+BY INSTALLING, COPYING, OR USING THE SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE 
+READ THIS AGREEMENT, UNDERSTAND ITS TERMS, AND AGREE TO BE BOUND BY ITS 
+PROVISIONS. IF YOU DO NOT AGREE TO THESE TERMS, DO NOT USE THE SOFTWARE.
+
+This Agreement has been prepared by legal counsel and constitutes a binding 
+legal contract. Violations may result in significant legal consequences.
+
+================================================================================
+INTELLECTUAL PROPERTY NOTICE
+================================================================================
+
+This software is protected by copyright and may be protected by patents. 
+All intellectual property rights are reserved.
+
+================================================================================
+
+Version: 2.0
+Last Updated: January 2025
+
+© 2025 Jordan After Midnight. All Rights Reserved.
+IRIS, Integrated Runtime Intelligence Service, and associated logos are 
+trademarks of Jordan After Midnight.

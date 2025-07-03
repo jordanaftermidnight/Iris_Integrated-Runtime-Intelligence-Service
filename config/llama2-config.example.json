@@ -1,0 +1,23 @@
+{
+  "host": "http://localhost:11434",
+  "defaultModel": "mistral:latest",
+  "models": {
+    "mistral:latest": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "num_predict": 2048
+    },
+    "qwen2.5:latest": {
+      "temperature": 0.5,
+      "top_p": 0.8,
+      "num_predict": 4096
+    },
+    "deepseek-coder:latest": {
+      "temperature": 0.3,
+      "top_p": 0.7,
+      "num_predict": 2048
+    }
+  },
+  "timeout": 60000,
+  "pullTimeout": 300000
+}
