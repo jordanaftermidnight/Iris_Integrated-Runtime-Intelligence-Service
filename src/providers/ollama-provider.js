@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 
-import { Ollama } from 'ollama';
+// Optional dependency - graceful fallback if not installed
+let Ollama;
+try {
+  const ollamaModule = await import('ollama');
+  Ollama = ollamaModule.Ollama;
+} catch (error) {
+  console.warn('Ollama dependency not found. Install with: npm install ollama');
+}
 
 /**
  * Ollama provider for local AI models
@@ -8,7 +15,8 @@ import { Ollama } from 'ollama';
 export class OllamaProvider {
   constructor(options = {}) {
     this.name = 'ollama';
-    this.ollama = new Ollama({ host: options.host || 'http://localhost:11434' });
+    this.available = !!Ollama;
+    this.ollama = Ollama ? new Ollama({ host: options.host || 'http://localhost:11434' }) : null;
     this.models = {
       fast: 'llama3.2:latest',
       balanced: 'mistral:7b',
@@ -62,6 +70,10 @@ export class OllamaProvider {
   }
 
   async chat(message, options = {}) {
+    if (!this.available || !this.ollama) {
+      throw new Error('Ollama provider not available. Install with: npm install ollama');
+    }
+
     const taskType = options.taskType || 'balanced';
     const model = this.selectModel(taskType);
     const systemPrompt = this.getSystemPrompt(taskType);

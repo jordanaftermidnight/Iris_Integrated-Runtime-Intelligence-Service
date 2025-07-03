@@ -36,17 +36,16 @@ npm install
 npm install -g .
 
 # Verify installation
-iris --version
 iris help
 ```
 
-#### **Option 2: Direct npm install (when published)**
+#### **Option 2: Direct npm install (future)**
 ```bash
-# Install globally (when available on npm)
+# Will be available when published to npm registry
 npm install -g iris-ai
 
 # Verify installation
-iris --version
+iris help
 ```
 
 #### **Option 3: Run without global install**
