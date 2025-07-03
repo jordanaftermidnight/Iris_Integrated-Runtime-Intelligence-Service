@@ -61,6 +61,6 @@ build/
 *.seed
 *.log
 
-# Sensitive documents (keep private)
-PATENT_STRATEGY.md
-SECURITY-INTERNAL.md
+# Local development files
+*.local
+*.dev
