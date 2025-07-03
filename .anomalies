@@ -1,1 +1,0 @@
-{"timestamp":"2025-07-03T08:51:15.891Z","user":"jordan_after_midnight","anomalies":[{"type":"suspicious_content","pattern":"/(rapid|bulk|batch|automated|script|bot)/i","confidence":0.8}],"context":{"pid":93192,"cwd":"/Users/jordan_after_midnight/gemini-mcp-integration","messageHash":"512b899142457359"}}
