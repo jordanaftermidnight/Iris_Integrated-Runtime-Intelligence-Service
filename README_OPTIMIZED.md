@@ -49,9 +49,8 @@
 | License Type | Users | Price/Year | Features |
 |-------------|-------|------------|----------|
 | **Personal** | 1 | **FREE** | Basic features, personal use only |
-| **Small Business** | 1-10 | **$299** | Full features, priority support |
-| **Medium Business** | 11-100 | **$999** | Full features, custom integrations |
-| **Enterprise** | 100+ | **$2,999** | Source access, dedicated support |
+| **Commercial** | 1+ | **Contact for pricing** | Full features, priority support |
+| **Enterprise** | 100+ | **Custom pricing** | Source access, dedicated support |
 
 ### 📞 **Get Commercial License**
 **Email**: [jordanaftermidnight@users.noreply.github.com](mailto:jordanaftermidnight@users.noreply.github.com)  

@@ -276,7 +276,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 **Dual License**: Personal use free, Commercial use licensed - see [LICENSE](LICENSE) file for details.
 
 - **Personal Use**: Free for individual, non-commercial use
-- **Commercial Use**: Requires paid license ($299-$2,999/year based on company size)  
+- **Commercial Use**: Requires paid license (contact for pricing)  
 - **Enterprise Features**: Source code access, custom development, SLA support
 
 ---
