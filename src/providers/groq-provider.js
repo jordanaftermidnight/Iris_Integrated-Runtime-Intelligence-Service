@@ -17,6 +17,10 @@ try {
   // Don't log here - will be handled in constructor
 }
 
+import { apiValidator } from '../core/api-validator.js';
+import { requestHandler } from '../core/request-handler.js';
+import { messageFormatter } from '../core/message-formatter.js';
+
 export class GroqProvider {
   constructor(options = {}) {
     this.name = 'groq';
@@ -97,17 +101,29 @@ export class GroqProvider {
     const systemPrompt = this.getSystemPrompt(taskType);
     const maxTokens = options.maxTokens || 2000;
 
-    try {
-      const response = await this.client.chat.completions.create({
+    // Format messages properly
+    const messages = messageFormatter.formatMessages('groq', [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: message }
+    ], options);
+
+    // Create safe API call with timeout and retry
+    const safeApiCall = requestHandler.createSafeApiCaller('groq', async (msgs, opts) => {
+      return await this.client.chat.completions.create({
         model: modelName,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: message }
-        ],
-        max_tokens: maxTokens,
-        temperature: options.temperature || 0.7,
-        top_p: options.topP || 1,
-        stop: options.stop || null
+        messages: msgs,
+        max_tokens: opts.maxTokens || maxTokens,
+        temperature: opts.temperature || 0.7,
+        top_p: opts.topP || 1,
+        stop: opts.stop || null
+      });
+    });
+
+    try {
+      const response = await safeApiCall(messages, {
+        ...options,
+        timeout: 30000,
+        maxRetries: 3
       });
 
       const text = response.choices[0].message.content;
@@ -130,7 +146,12 @@ export class GroqProvider {
       };
 
     } catch (error) {
-      throw new Error(`Groq chat error: ${error.message}`);
+      // Enhanced error with more context
+      const enhancedError = new Error(`Groq API error: ${error.message}`);
+      enhancedError.provider = 'groq';
+      enhancedError.model = modelName;
+      enhancedError.originalError = error;
+      throw enhancedError;
     }
   }
 

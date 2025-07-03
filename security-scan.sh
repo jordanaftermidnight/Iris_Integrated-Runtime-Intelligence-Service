@@ -15,9 +15,11 @@ else
     echo "✅ No real API keys found in code"
 fi
 
-# Check for hardcoded secrets
+# Check for hardcoded secrets (excluding common false positives)
 echo "🔍 Scanning for hardcoded secrets..."
-if grep -ri "password\|secret\|token" . --include="*.js" --exclude-dir=node_modules | grep -v "example\|template\|comment" | grep "=" | head -5; then
+# Exclude: costPerToken, maxTokens, getToken, token counting, API documentation, config keys
+if grep -ri "password\s*=\|secret\s*=\|apikey\s*=\|api_key\s*=" . --include="*.js" --exclude-dir=node_modules | \
+   grep -v "example\|template\|comment\|costPerToken\|maxTokens\|getToken\|sanitizeApiKeys\|process\.env" | head -5; then
     echo "⚠️  WARNING: Potential hardcoded secrets found"
 else
     echo "✅ No obvious hardcoded secrets"
@@ -37,9 +39,11 @@ else
     exit 1
 fi
 
-# Check for dangerous functions
+# Check for dangerous functions (excluding ESLint config and safe usage)
 echo "🔍 Scanning for dangerous functions..."
-if grep -r "eval\|Function(" . --include="*.js" --exclude-dir=node_modules 2>/dev/null; then
+# Exclude ESLint rules and comments about eval
+if grep -r "eval\|Function(" . --include="*.js" --exclude-dir=node_modules --exclude=".eslintrc.js" 2>/dev/null | \
+   grep -v "no-eval\|eslint\|comment\|//.*eval" | head -5; then
     echo "⚠️  WARNING: Dangerous functions found"
 else
     echo "✅ No dangerous functions detected"

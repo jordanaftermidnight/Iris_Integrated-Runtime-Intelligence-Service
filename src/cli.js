@@ -395,6 +395,11 @@ async function runCLI() {
         await handleStatusCommand(ai, options);
         break;
 
+      case 'neural':
+      case 'insights':
+        await handleNeuralInsightsCommand(ai, options);
+        break;
+
       case 'config':
         await handleConfigCommand(ai, args.slice(1), options);
         break;

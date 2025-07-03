@@ -2,6 +2,12 @@
 
 import { integrityChecker } from './integrity-checker.js';
 import { usageMonitor } from './usage-monitor.js';
+import { errorRecovery } from './error-recovery.js';
+import { requestHandler } from './request-handler.js';
+import { messageFormatter } from './message-formatter.js';
+import { NeuralLearningSystem } from './neural-learning.js';
+
+const neuralSystem = new NeuralLearningSystem();
 
 /**
  * Smart AI Router - Intelligently routes requests to the best available provider
@@ -164,6 +170,19 @@ export class AIRouter {
       throw error;
     }
 
+    // Format and validate messages
+    let formattedMessages = messageFormatter.formatMessages(
+      options.provider || 'openai',
+      typeof message === 'string' ? [{ role: 'user', content: message }] : message,
+      options
+    );
+    
+    // Get neural prediction for best provider
+    const predictedProvider = neuralSystem.predictBestProvider(message, options.taskType || 'balanced');
+    if (predictedProvider && !options.provider) {
+      options.provider = predictedProvider;
+    }
+
     // Log usage for monitoring
     usageMonitor.logUsage({
       type: 'ai_request',
@@ -173,8 +192,9 @@ export class AIRouter {
     });
 
     const taskType = options.taskType || 'balanced';
-    const maxRetries = options.maxRetries || 2;
+    const maxRetries = options.maxRetries || 3;
     let lastError;
+    let attemptCount = 0;
 
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
@@ -205,22 +225,63 @@ export class AIRouter {
           timestamp: new Date().toISOString()
         });
 
+        // Learn from success
+        neuralSystem.learnFromSuccess({
+          message,
+          provider: provider.name,
+          taskType,
+          responseTime,
+          cost: result.usage?.cost || 0
+        });
+
         return result;
 
       } catch (error) {
+        attemptCount++;
         lastError = error;
-        // Provider failed - attempting fallback
         
-        if (error.message.includes('quota') || error.message.includes('rate limit')) {
-          // Rate limit reached - trying alternative provider
+        // Try error recovery
+        const recovery = await errorRecovery.recoverFromError(error, {
+          provider: provider.name,
+          messages: formattedMessages,
+          options,
+          attempt: attemptCount,
+          error: lastError
+        });
+        
+        if (recovery.success && recovery.action === 'retry') {
+          // Apply modifications
+          if (recovery.modifications.messages) {
+            formattedMessages = recovery.modifications.messages;
+          }
+          if (recovery.modifications.options) {
+            Object.assign(options, recovery.modifications.options);
+          }
+          if (recovery.modifications.useAlternateProvider) {
+            options.excludeProviders = [...(options.excludeProviders || []), provider.name];
+          }
+          
+          // Wait before retry if needed
+          if (attempt < maxRetries - 1) {
+            const delay = recovery.modifications.retryDelay || 1000;
+            await new Promise(resolve => setTimeout(resolve, delay));
+          }
+          
           continue;
+        } else if (recovery.action === 'fail') {
+          throw new Error(recovery.error || error.message);
         }
+        
+        // Learn from failure
+        neuralSystem.learnFromError({
+          error: lastError,
+          provider: provider.name,
+          message,
+          taskType
+        });
         
         // Update failure stats
-        const failedProvider = await this.selectProvider(taskType, options).catch(() => null);
-        if (failedProvider) {
-          this.updateProviderStats(failedProvider.name, false, 0, 0);
-        }
+        this.updateProviderStats(provider.name, false, 0, 0);
       }
     }
 
@@ -242,6 +303,13 @@ export class AIRouter {
     } else {
       stats.failures++;
     }
+  }
+
+  /**
+   * Get all registered providers
+   */
+  getAllProviders() {
+    return Array.from(this.providers.values());
   }
 
   /**
