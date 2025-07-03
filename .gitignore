@@ -59,4 +59,8 @@ build/
 # Runtime files
 *.pid
 *.seed
-*.logPATENT_STRATEGY.md
+*.log
+
+# Sensitive documents (keep private)
+PATENT_STRATEGY.md
+SECURITY-INTERNAL.md
