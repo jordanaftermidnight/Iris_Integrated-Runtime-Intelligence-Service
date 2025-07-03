@@ -8,14 +8,14 @@
 
 ### **One-Line Install**
 ```bash
-git clone https://github.com/jordanaftermidnight/multi-ai-integration-CLI.git && cd multi-ai-integration-CLI && chmod +x install.sh && ./install.sh
+git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git && cd Iris_Integrated-Runtime-Intelligence-Service && chmod +x install.sh && ./install.sh
 ```
 
 ### **Step-by-Step Install**
 ```bash
 # 1. Clone repository
-git clone https://github.com/jordanaftermidnight/multi-ai-integration-CLI.git
-cd multi-ai-integration-CLI
+git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git
+cd Iris_Integrated-Runtime-Intelligence-Service
 
 # 2. Run automated installer
 chmod +x install.sh
@@ -45,8 +45,8 @@ npm run setup
 ### **Method 1: Global Installation (Recommended)**
 ```bash
 # Clone and install globally
-git clone https://github.com/jordanaftermidnight/multi-ai-integration-CLI.git
-cd multi-ai-integration-CLI
+git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git
+cd Iris_Integrated-Runtime-Intelligence-Service
 npm install
 npm install -g .
 
@@ -58,8 +58,8 @@ iris --version
 ### **Method 2: Local Installation**
 ```bash
 # Clone and run locally
-git clone https://github.com/jordanaftermidnight/multi-ai-integration-CLI.git
-cd multi-ai-integration-CLI
+git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git
+cd Iris_Integrated-Runtime-Intelligence-Service
 npm install
 
 # Use with npm scripts
@@ -70,8 +70,8 @@ npm start chat "Hello!"
 ### **Method 3: Development Installation**
 ```bash
 # Clone for development
-git clone https://github.com/jordanaftermidnight/multi-ai-integration-CLI.git
-cd multi-ai-integration-CLI
+git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git
+cd Iris_Integrated-Runtime-Intelligence-Service
 npm install
 
 # Create alias for convenience
@@ -219,8 +219,8 @@ brew install git
 brew install ollama
 
 # Then follow standard installation
-git clone https://github.com/jordanaftermidnight/multi-ai-integration-CLI.git
-cd multi-ai-integration-CLI
+git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git
+cd Iris_Integrated-Runtime-Intelligence-Service
 ./install.sh
 ```
 
@@ -234,8 +234,8 @@ sudo apt install nodejs npm git curl
 curl -fsSL https://ollama.ai/install.sh | sh
 
 # Then follow standard installation
-git clone https://github.com/jordanaftermidnight/multi-ai-integration-CLI.git
-cd multi-ai-integration-CLI
+git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git
+cd Iris_Integrated-Runtime-Intelligence-Service
 ./install.sh
 ```
 
@@ -245,8 +245,8 @@ cd multi-ai-integration-CLI
 # Install Git from https://git-scm.com/
 
 # Open Command Prompt or PowerShell
-git clone https://github.com/jordanaftermidnight/multi-ai-integration-CLI.git
-cd multi-ai-integration-CLI
+git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git
+cd Iris_Integrated-Runtime-Intelligence-Service
 npm install
 npm install -g .
 
@@ -307,7 +307,7 @@ git log --oneline -5
 - **Quick Start**: [QUICKSTART.md](QUICKSTART.md)
 
 ### **Support**
-- **GitHub Issues**: [Report problems](https://github.com/jordanaftermidnight/multi-ai-integration-CLI/issues)
+- **GitHub Issues**: [Report problems](https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service/issues)
 - **Email**: jordanaftermidnight@users.noreply.github.com
 
 ### **Community**

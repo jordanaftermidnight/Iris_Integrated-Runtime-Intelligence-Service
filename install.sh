@@ -94,7 +94,7 @@ show_next_steps() {
     echo "3. Add API keys to .env (optional)"
     echo "4. Start using: iris help"
     echo ""
-    echo "📚 Documentation: https://github.com/jordanaftermidnight/multi-ai-integration-CLI"
+    echo "📚 Documentation: https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service"
 }
 
 # Main installation

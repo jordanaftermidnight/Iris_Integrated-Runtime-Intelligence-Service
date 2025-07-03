@@ -40,12 +40,12 @@
   "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jordanaftermidnight/multi-ai-integration-CLI.git"
+    "url": "https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git"
   },
   "bugs": {
-    "url": "https://github.com/jordanaftermidnight/multi-ai-integration-CLI/issues"
+    "url": "https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service/issues"
   },
-  "homepage": "https://github.com/jordanaftermidnight/multi-ai-integration-CLI#readme",
+  "homepage": "https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service#readme",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.3",
     "@google/generative-ai": "^0.21.0",

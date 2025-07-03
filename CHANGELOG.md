@@ -201,6 +201,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Support
 
-- 📖 [Documentation](https://github.com/jordanaftermidnight/multi-ai-mcp-integration/wiki)
-- 🐛 [Report Issues](https://github.com/jordanaftermidnight/multi-ai-mcp-integration/issues)
-- 💬 [Discussions](https://github.com/jordanaftermidnight/multi-ai-mcp-integration/discussions)
+- 📖 [Documentation](https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service/wiki)
+- 🐛 [Report Issues](https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service/issues)
+- 💬 [Discussions](https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service/discussions)

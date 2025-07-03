@@ -140,8 +140,8 @@ function main() {
     log(colors.blue, '   Then: ollama pull mistral');
   }
   
-  log(colors.blue, '\n📚 Documentation: https://github.com/jordanaftermidnight/multi-ai-integration-CLI');
-  log(colors.blue, '🐛 Issues: https://github.com/jordanaftermidnight/multi-ai-integration-CLI/issues\n');
+  log(colors.blue, '\n📚 Documentation: https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service');
+  log(colors.blue, '🐛 Issues: https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service/issues\n');
 }
 
 // Run setup

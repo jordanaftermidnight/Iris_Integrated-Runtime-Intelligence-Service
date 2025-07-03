@@ -30,8 +30,8 @@ Iris is a **professional AI development assistant** that provides **IDE-level in
 #### **Option 1: Install from GitHub (Recommended)**
 ```bash
 # Clone and install
-git clone https://github.com/jordanaftermidnight/multi-ai-integration-CLI.git
-cd multi-ai-integration-CLI
+git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git
+cd Iris_Integrated-Runtime-Intelligence-Service
 npm install
 npm install -g .
 
@@ -51,8 +51,8 @@ iris help
 #### **Option 3: Run without global install**
 ```bash
 # Clone and run directly
-git clone https://github.com/jordanaftermidnight/multi-ai-integration-CLI.git
-cd multi-ai-integration-CLI
+git clone https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service.git
+cd Iris_Integrated-Runtime-Intelligence-Service
 npm install
 npm start help
 ```
@@ -265,7 +265,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## 📧 **Support**
 
-- **Issues**: [GitHub Issues](https://github.com/jordanaftermidnight/multi-ai-integration-CLI/issues)
+- **Issues**: [GitHub Issues](https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service/issues)
 - **Email**: jordanaftermidnight@users.noreply.github.com
 
 ---
