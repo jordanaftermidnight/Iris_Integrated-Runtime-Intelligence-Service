@@ -156,7 +156,7 @@ async function runCLI() {
 
   // Show version
   if (args.includes('--version') || args[0] === 'version') {
-    console.log('🤖 Iris - Integrated Runtime Intelligence Service v2.4.0');
+    console.log('🤖 Iris - Integrated Runtime Intelligence Service v0.9.0 (Beta)');
     return;
   }
 

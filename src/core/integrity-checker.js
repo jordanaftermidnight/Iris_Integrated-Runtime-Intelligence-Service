@@ -221,16 +221,46 @@ export class IntegrityChecker {
   generateIntegrityReport() {
     const report = {
       timestamp: new Date().toISOString(),
-      version: '2.4.0',
+      version: '0.9.0',
+      release_type: 'beta',
       integrity: this.verifyIntegrity(),
       license: this.validateLicenseCompliance(),
       commercial_detected: this.detectCommercialUsage(),
       valid_license: this.hasValidCommercialLicense(),
       file_count: this.coreFiles.length,
-      hash_algorithm: 'SHA-256'
+      hash_algorithm: 'SHA-256',
+      version_tamper_check: this.validateVersionIntegrity()
     };
 
     return report;
+  }
+
+  /**
+   * Validate version integrity to prevent tampering
+   */
+  validateVersionIntegrity() {
+    try {
+      // Check package.json version
+      const packagePath = path.join(process.cwd(), 'package.json');
+      if (fs.existsSync(packagePath)) {
+        const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+        const expectedVersion = '0.9.0';
+        
+        if (packageJson.version !== expectedVersion) {
+          console.warn('⚠️  Version mismatch detected');
+          return {
+            valid: false,
+            expected: expectedVersion,
+            found: packageJson.version,
+            warning: 'Version tampering detected'
+          };
+        }
+      }
+      
+      return { valid: true, version: '0.9.0', type: 'beta' };
+    } catch (error) {
+      return { valid: false, error: 'Version validation failed' };
+    }
   }
 }
 

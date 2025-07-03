@@ -45,7 +45,7 @@ async function runExamples() {
     console.log('\n4. Knowledge Base Example:');
     ai.addKnowledge('project_info', {
       name: 'Multi-AI Integration',
-      version: '2.0.0',
+      version: '0.9.0',
       description: 'Advanced multi-provider AI system'
     });
     

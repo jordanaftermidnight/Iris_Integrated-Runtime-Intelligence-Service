@@ -5,7 +5,7 @@
  * Professional development commands with intelligent code analysis
  * 
  * @author Jordan After Midnight
- * @version 2.4.0
+ * @version 0.9.0
  */
 
 import fs from 'fs';

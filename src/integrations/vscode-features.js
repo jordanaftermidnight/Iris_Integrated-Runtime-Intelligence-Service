@@ -5,7 +5,7 @@
  * Professional development tools with intelligent code analysis and workspace awareness
  * 
  * @author Jordan After Midnight
- * @version 2.4.0
+ * @version 0.9.0
  */
 
 import fs from 'fs';

@@ -2,7 +2,7 @@
 
 **Integrated Runtime Intelligence Service - Professional Development Intelligence**
 
-[![Version](https://img.shields.io/badge/Version-2.4.0-brightgreen.svg)](package.json)
+[![Version](https://img.shields.io/badge/Version-0.9.0--beta-orange.svg)](package.json)
 [![IDE Features](https://img.shields.io/badge/IDE%20Features-✅%20Integrated-blue.svg)]()
 [![Multi-AI](https://img.shields.io/badge/Multi--AI-5%20Providers-purple.svg)]()
 [![Performance](https://img.shields.io/badge/Cache%20Hit%20Rate-85%25-orange.svg)]()

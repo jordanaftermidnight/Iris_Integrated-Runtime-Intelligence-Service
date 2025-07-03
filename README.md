@@ -2,7 +2,7 @@
 
 **Professional AI Development Assistant with Multi-Provider Intelligence**
 
-[![Version](https://img.shields.io/badge/version-2.4.0-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.9.0--beta-orange.svg)](package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 [![IDE Features](https://img.shields.io/badge/IDE%20Features-✅%20Integrated-blue.svg)]()
