@@ -53,7 +53,7 @@ function parseArgs(args) {
  */
 function showHelp() {
   console.log(`
-🤖 Iris - Integrated Runtime Intelligence Service v2.3.0
+🤖 Iris - Integrated Runtime Intelligence Service v2.4.0
 ==========================================
 Cost-Optimized AI with Mistral-First Logic
 

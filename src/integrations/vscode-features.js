@@ -263,13 +263,72 @@ Provide 3 options:
 3. **Detailed**: [with body if needed]
 `;
 
-    const response = await this.ai.chat(prompt, {
-      task: 'code',
-      maxTokens: 300,
-      context: 'git_commit'
-    });
+    try {
+      const response = await this.ai.chat(prompt, {
+        task: 'code',
+        maxTokens: 300,
+        context: 'git_commit'
+      });
 
-    return this.parseCommitSuggestions(response);
+      return this.parseCommitSuggestions(response);
+    } catch (error) {
+      // Fallback to basic commit message generation when no AI providers available
+      console.log('⚠️  AI providers unavailable, generating basic commit message...');
+      return this.generateBasicCommitMessage(stagedChanges);
+    }
+  }
+
+  /**
+   * Generate basic commit message fallback when AI providers unavailable
+   */
+  generateBasicCommitMessage(stagedChanges) {
+    const addedFiles = stagedChanges.filter(c => c.status === 'A').map(c => c.file);
+    const modifiedFiles = stagedChanges.filter(c => c.status === 'M').map(c => c.file);
+    const deletedFiles = stagedChanges.filter(c => c.status === 'D').map(c => c.file);
+    
+    let commitType = 'chore';
+    let description = 'update files';
+    
+    // Determine commit type and description based on file changes
+    if (addedFiles.length > 0) {
+      commitType = 'feat';
+      if (addedFiles.length === 1) {
+        description = `add ${path.basename(addedFiles[0])}`;
+      } else {
+        description = `add ${addedFiles.length} new files`;
+      }
+    } else if (modifiedFiles.length > 0) {
+      // Check file types for better categorization
+      const hasCode = modifiedFiles.some(f => /\.(js|ts|py|java|cpp|c|go|rs)$/.test(f));
+      const hasDocs = modifiedFiles.some(f => /\.(md|txt|rst)$/.test(f));
+      const hasConfig = modifiedFiles.some(f => /\.(json|yml|yaml|toml|ini)$/.test(f));
+      
+      if (hasDocs) {
+        commitType = 'docs';
+        description = 'update documentation';
+      } else if (hasConfig) {
+        commitType = 'chore';
+        description = 'update configuration';
+      } else if (hasCode) {
+        commitType = 'fix';
+        description = 'update code';
+      }
+      
+      if (modifiedFiles.length === 1) {
+        description = `update ${path.basename(modifiedFiles[0])}`;
+      }
+    } else if (deletedFiles.length > 0) {
+      commitType = 'chore';
+      description = `remove ${deletedFiles.length === 1 ? path.basename(deletedFiles[0]) : deletedFiles.length + ' files'}`;
+    }
+    
+    const message = `${commitType}: ${description}`;
+    
+    return [
+      message,
+      `${commitType}: ${description} (basic)`,
+      `${commitType}: ${description}\n\nGenerated fallback commit message`
+    ];
   }
 
   /**
@@ -312,11 +371,17 @@ Please explain this code section in a clear, educational way:
 Keep the explanation accessible but technical enough to be useful.
 `;
 
-    return await this.ai.chat(prompt, {
-      task: 'code',
-      maxTokens: 800,
-      context: 'code_explanation'
-    });
+    try {
+      return await this.ai.chat(prompt, {
+        task: 'code',
+        maxTokens: 800,
+        context: 'code_explanation'
+      });
+    } catch (error) {
+      // Fallback explanation when no AI providers available
+      console.log('⚠️  AI providers unavailable, generating basic code analysis...');
+      return this.generateBasicCodeExplanation(codeSection, fileContext);
+    }
   }
 
   /**
@@ -358,11 +423,109 @@ For each suggestion, provide:
 Format as actionable refactoring steps.
 `;
 
-    return await this.ai.chat(prompt, {
-      task: 'code',
-      maxTokens: 1000,
-      context: 'code_refactoring'
+    try {
+      return await this.ai.chat(prompt, {
+        task: 'code',
+        maxTokens: 1000,
+        context: 'code_refactoring'
+      });
+    } catch (error) {
+      // Fallback refactoring suggestions when no AI providers available
+      console.log('⚠️  AI providers unavailable, generating basic refactoring suggestions...');
+      return this.generateBasicRefactoringSuggestions(codeSection, fileContext, refactorType);
+    }
+  }
+
+  /**
+   * Generate basic code explanation fallback
+   */
+  generateBasicCodeExplanation(codeSection, fileContext) {
+    const lines = codeSection.split('\n');
+    const language = fileContext.file.language;
+    
+    let explanation = `## Basic Code Analysis (${language})\n\n`;
+    explanation += `**File**: ${fileContext.file.path}\n`;
+    explanation += `**Lines**: ${lines.length} lines of code\n\n`;
+    
+    // Basic code structure analysis
+    if (language === 'javascript' || language === 'typescript') {
+      const functions = lines.filter(line => line.includes('function ') || line.includes('const ') && line.includes('=>'));
+      const imports = lines.filter(line => line.trim().startsWith('import '));
+      const exports = lines.filter(line => line.includes('export '));
+      
+      if (functions.length > 0) explanation += `**Functions**: Found ${functions.length} function(s)\n`;
+      if (imports.length > 0) explanation += `**Imports**: ${imports.length} import statement(s)\n`;
+      if (exports.length > 0) explanation += `**Exports**: ${exports.length} export statement(s)\n`;
+    } else if (language === 'python') {
+      const functions = lines.filter(line => line.trim().startsWith('def '));
+      const classes = lines.filter(line => line.trim().startsWith('class '));
+      const imports = lines.filter(line => line.trim().startsWith('import ') || line.trim().startsWith('from '));
+      
+      if (classes.length > 0) explanation += `**Classes**: Found ${classes.length} class(es)\n`;
+      if (functions.length > 0) explanation += `**Functions**: Found ${functions.length} function(s)\n`;
+      if (imports.length > 0) explanation += `**Imports**: ${imports.length} import statement(s)\n`;
+    }
+    
+    explanation += `\n**Note**: This is a basic analysis. For detailed code explanation, configure AI providers.\n`;
+    explanation += `Install Ollama (https://ollama.ai) for free local analysis or add API keys for cloud providers.`;
+    
+    return explanation;
+  }
+
+  /**
+   * Generate basic refactoring suggestions fallback
+   */
+  generateBasicRefactoringSuggestions(codeSection, fileContext, refactorType) {
+    const language = fileContext.file.language;
+    let suggestions = `## Basic Refactoring Suggestions (${language})\n\n`;
+    
+    const lines = codeSection.split('\n');
+    const issues = [];
+    
+    // Basic code quality checks
+    lines.forEach((line, index) => {
+      const trimmed = line.trim();
+      
+      // Long lines
+      if (line.length > 120) {
+        issues.push(`Line ${index + 1}: Consider breaking long line (${line.length} characters)`);
+      }
+      
+      // TODO/FIXME comments
+      if (trimmed.includes('TODO') || trimmed.includes('FIXME')) {
+        issues.push(`Line ${index + 1}: Address TODO/FIXME comment`);
+      }
+      
+      // Nested callbacks (JavaScript)
+      if (language === 'javascript' && line.includes('.then(') && line.includes('.then(')) {
+        issues.push(`Line ${index + 1}: Consider using async/await instead of nested .then()`);
+      }
+      
+      // Magic numbers
+      const numbers = trimmed.match(/\b\d{2,}\b/g);
+      if (numbers && !trimmed.includes('//') && !trimmed.includes('const ')) {
+        issues.push(`Line ${index + 1}: Consider extracting magic numbers to constants`);
+      }
     });
+    
+    if (issues.length > 0) {
+      suggestions += `**Issues Found**:\n`;
+      issues.forEach(issue => suggestions += `- ${issue}\n`);
+    } else {
+      suggestions += `**No obvious issues detected** in this code section.\n`;
+    }
+    
+    suggestions += `\n**General Refactoring Tips**:\n`;
+    suggestions += `- Extract repeated code into functions\n`;
+    suggestions += `- Use meaningful variable and function names\n`;
+    suggestions += `- Add error handling where appropriate\n`;
+    suggestions += `- Consider breaking large functions into smaller ones\n`;
+    suggestions += `- Add comments for complex logic\n\n`;
+    
+    suggestions += `**Note**: For intelligent refactoring suggestions, configure AI providers.\n`;
+    suggestions += `Install Ollama (https://ollama.ai) for free analysis or add API keys for enhanced suggestions.`;
+    
+    return suggestions;
   }
 
   // Helper methods
