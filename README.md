@@ -70,6 +70,9 @@ iris commit
 
 # Analyze workspace
 iris workspace
+
+# Update to latest version
+iris update
 ```
 
 ### **Setup AI Providers** (Optional)

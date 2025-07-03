@@ -275,16 +275,59 @@ docker run --rm iris-ai help
 
 ## 🔄 **Updating Iris**
 
-### **Update from Git**
+### **Quick Update (Recommended)**
 ```bash
-# Pull latest changes
+# Navigate to your Iris directory
+cd /path/to/Iris_Integrated-Runtime-Intelligence-Service
+
+# Pull latest changes and update
+git pull origin main && npm install && npm install -g .
+
+# Verify update
+iris --version
+```
+
+### **Step-by-Step Update**
+```bash
+# 1. Navigate to Iris directory
+cd /path/to/Iris_Integrated-Runtime-Intelligence-Service
+
+# 2. Check for updates
+git fetch origin
+git status
+
+# 3. Pull latest changes
 git pull origin main
 
-# Reinstall dependencies
+# 4. Update dependencies
 npm install
 
-# Reinstall globally
+# 5. Reinstall globally
 npm install -g .
+
+# 6. Verify installation
+iris --version
+iris health
+```
+
+### **Update with Backup (Safe Method)**
+```bash
+# 1. Backup current configuration
+cp .env .env.backup 2>/dev/null || echo "No .env to backup"
+
+# 2. Check current version
+iris --version
+
+# 3. Update
+git pull origin main
+npm install
+npm install -g .
+
+# 4. Restore configuration if needed
+cp .env.backup .env 2>/dev/null || echo "No backup to restore"
+
+# 5. Test new version
+iris health
 ```
 
 ### **Check for Updates**
@@ -292,9 +335,47 @@ npm install -g .
 # Check current version
 iris --version
 
-# Check latest version
+# Check latest available version
 git fetch origin
 git log --oneline -5
+
+# Compare with current
+git status
+```
+
+### **Force Clean Update (If Issues)**
+```bash
+# Clean install (removes local changes)
+git fetch origin
+git reset --hard origin/main
+npm ci
+npm install -g .
+
+# Verify
+iris --version
+iris providers
+```
+
+### **Auto-Update Script**
+Create an update script for easy future updates:
+```bash
+# Create update script
+cat > update-iris.sh << 'EOF'
+#!/bin/bash
+echo "🔄 Updating Iris..."
+cd "$(dirname "$0")"
+git pull origin main
+npm install
+npm install -g .
+echo "✅ Update complete!"
+iris --version
+EOF
+
+# Make executable
+chmod +x update-iris.sh
+
+# Use anytime
+./update-iris.sh
 ```
 
 ---

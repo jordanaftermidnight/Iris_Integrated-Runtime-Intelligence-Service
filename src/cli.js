@@ -2,6 +2,7 @@
 
 import MultiAI from './index.js';
 import IDECommands from './commands/vscode-commands.js';
+import { execSync } from 'child_process';
 
 /**
  * Enhanced Multi-AI Integration CLI
@@ -38,6 +39,7 @@ function parseArgs(args) {
   result.options.stream = args.includes('--stream');
   result.options.local = args.includes('--local');
   result.options.verbose = args.includes('--verbose') || args.includes('-v');
+  result.options.force = args.includes('--force');
 
   // Extract message (everything that's not a flag)
   result.message = args
@@ -69,6 +71,7 @@ COMMANDS:
   health                      Check system health and provider status
   status                      Show comprehensive system status
   config save/load [path]     Manage configuration files
+  update                      Update Iris to latest version (requires git)
   clear                       Clear conversation context
   help                        Show this help message
 
@@ -107,6 +110,8 @@ EXAMPLES:
   iris file ./my-script.js --task=code --verbose
   iris providers
   iris health
+  iris update                           # Update to latest version
+  iris --version                        # Show current version
 
 IDE INTEGRATION EXAMPLES:
   iris complete ./src/index.js 42 15    # Smart completions at line 42, col 15
@@ -146,6 +151,12 @@ async function runCLI() {
   // Show help for empty args or help command
   if (args.length === 0 || args.includes('--help') || args.includes('-h') || args[0] === 'help') {
     showHelp();
+    return;
+  }
+
+  // Show version
+  if (args.includes('--version') || args[0] === 'version') {
+    console.log('🤖 Iris - Integrated Runtime Intelligence Service v2.4.0');
     return;
   }
 
@@ -199,6 +210,10 @@ async function runCLI() {
 
       case 'clear':
         await handleClearCommand(ai, options);
+        break;
+
+      case 'update':
+        await handleUpdateCommand(options);
         break;
 
       // IDE integration commands
@@ -615,6 +630,95 @@ async function handleContextCommand(ideCommands, args, options) {
   }
   
   return await ideCommands.context(filePath, options);
+}
+
+/**
+ * Handle update command
+ */
+async function handleUpdateCommand(options) {
+  try {
+    console.log('🔄 Checking for Iris updates...');
+    
+    // Check if we're in a git repository
+    try {
+      execSync('git status', { stdio: 'pipe' });
+    } catch (error) {
+      console.error('❌ Update failed: Iris must be installed from git repository');
+      console.log('💡 Install from: https://github.com/jordanaftermidnight/Iris_Integrated-Runtime-Intelligence-Service');
+      return;
+    }
+    
+    // Check for uncommitted changes
+    const gitStatus = execSync('git status --porcelain', { encoding: 'utf8' });
+    if (gitStatus.trim().length > 0) {
+      console.log('⚠️  Warning: You have uncommitted changes');
+      if (!options.force) {
+        console.log('💡 Use --force to update anyway, or commit your changes first');
+        return;
+      }
+    }
+    
+    // Get current version
+    const currentVersion = execSync('node src/enhanced-ai.js --version 2>/dev/null || echo "unknown"', { encoding: 'utf8' }).trim();
+    console.log(`📦 Current version: ${currentVersion}`);
+    
+    // Fetch latest changes
+    console.log('📡 Fetching latest changes...');
+    execSync('git fetch origin', { stdio: 'inherit' });
+    
+    // Check if update is available
+    try {
+      const behind = execSync('git rev-list HEAD..origin/main --count', { encoding: 'utf8' }).trim();
+      if (behind === '0') {
+        console.log('✅ Iris is already up to date!');
+        return;
+      }
+      console.log(`📈 ${behind} update(s) available`);
+    } catch (error) {
+      console.log('📈 Updates may be available');
+    }
+    
+    // Show what will be updated
+    try {
+      console.log('\n📋 Latest changes:');
+      execSync('git log --oneline HEAD..origin/main -5', { stdio: 'inherit' });
+    } catch (error) {
+      // Ignore log errors
+    }
+    
+    console.log('\n🔄 Updating Iris...');
+    
+    // Pull latest changes
+    console.log('📥 Pulling latest changes...');
+    execSync('git pull origin main', { stdio: 'inherit' });
+    
+    // Update dependencies
+    console.log('📦 Updating dependencies...');
+    execSync('npm install', { stdio: 'inherit' });
+    
+    // Reinstall globally
+    console.log('🌐 Reinstalling globally...');
+    execSync('npm install -g .', { stdio: 'inherit' });
+    
+    // Verify update
+    console.log('\n✅ Update complete!');
+    const newVersion = execSync('iris --version 2>/dev/null || echo "unknown"', { encoding: 'utf8' }).trim();
+    console.log(`📦 Updated to: ${newVersion}`);
+    
+    // Test installation
+    console.log('\n🧪 Testing installation...');
+    execSync('iris health', { stdio: 'inherit' });
+    
+    console.log('\n🎉 Iris update successful!');
+    
+  } catch (error) {
+    console.error('❌ Update failed:', error.message);
+    console.log('\n🛠️  Manual update steps:');
+    console.log('1. git pull origin main');
+    console.log('2. npm install');  
+    console.log('3. npm install -g .');
+    console.log('\n📚 Full instructions: see INSTALL.md');
+  }
 }
 
 // Run CLI if this file is executed directly
