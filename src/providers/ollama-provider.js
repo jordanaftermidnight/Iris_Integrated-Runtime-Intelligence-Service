@@ -47,11 +47,14 @@ export class OllamaProvider {
   }
 
   async getAvailableModels() {
+    if (!this.available || !this.ollama) {
+      return [];
+    }
+    
     try {
       const response = await this.ollama.list();
       return response.models.map(m => m.name);
     } catch (error) {
-      console.error('Error fetching Ollama models:', error);
       return [];
     }
     }

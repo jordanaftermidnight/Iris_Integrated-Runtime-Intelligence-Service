@@ -193,7 +193,7 @@ export class IDECommands {
       console.log(`📊 Structure: ${context.structure.totalFiles} files`);
       console.log(`🔧 Extensions: ${context.structure.extensions.slice(0, 10).join(', ')}`);
       
-      if (context.dependencies.main.length > 0) {
+      if (context.dependencies && context.dependencies.main && context.dependencies.main.length > 0) {
         console.log(`📦 Dependencies: ${context.dependencies.main.slice(0, 5).join(', ')}${context.dependencies.main.length > 5 ? '...' : ''}`);
       }
       
